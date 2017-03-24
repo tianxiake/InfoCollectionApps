@@ -1,15 +1,18 @@
 package com.example.liuyongjie.infocollectionapps.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 
 import com.example.liuyongjie.infocollectionapps.entity.CustomWifiInfo;
 import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
 import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
 import com.example.liuyongjie.infocollectionapps.log.util.Author;
+import com.example.liuyongjie.infocollectionapps.log.util.Business;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,30 +29,28 @@ public class WifiUtil {
     private WifiManager mWifiManager;
     // 定义WifiInfo对象
     private WifiInfo mWifiInfo;
-    // 扫描出的网络连接列表
-    private List mWifiList;
-    // 网络连接列表
-    private List mWifiConfiguration;
-    // 定义一个WifiLock
-    WifiManager.WifiLock mWifiLock;
-
 
     // 构造器
     public WifiUtil(Context context) {
         // 取得WifiManager对象
-        mWifiManager = (WifiManager) context
-                .getSystemService(Context.WIFI_SERVICE);
+        mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         // 取得WifiInfo对象
         mWifiInfo = mWifiManager.getConnectionInfo();
     }
 
     //获取当前手机wifi列表。6.0系统需要用户开启定位才能拿到wifi列表
     public List<CustomWifiInfo> getNearbyWifiList() {
-        List<ScanResult> results = mWifiManager.getScanResults();
-        List<CustomWifiInfo> infos = new ArrayList<>();
-        for (ScanResult result : results) {
-            CustomWifiInfo info = new CustomWifiInfo(result.SSID, result.BSSID, result.level);
-            infos.add(info);
+        List<CustomWifiInfo> infos = null;
+        try {
+            List<ScanResult> results = mWifiManager.getScanResults();
+            infos = new ArrayList<>();
+            log.verbose(Author.liuyongjie, Business.dev_test, "扫描到的wifi列表集合长度{}", results.size());
+            for (ScanResult result : results) {
+                CustomWifiInfo info = new CustomWifiInfo(result.SSID, result.BSSID, WifiManager.calculateSignalLevel(result.level, 5));
+                infos.add(info);
+            }
+        } catch (Exception e) {
+            log.error(Author.liuyongjie, e);
         }
         return infos;
     }
@@ -61,12 +62,14 @@ public class WifiUtil {
 
     // 得到接入点的SSID,就是连接的wifi名
     public String getSSID() {
-        return (mWifiInfo == null) ? "NULL" : mWifiInfo.getSSID();
+        String ssid = mWifiInfo.getSSID();
+        ssid = ssid.substring(1, ssid.length() - 1);
+        return ssid == null ? "" : ssid;
     }
 
     // 得到wifi的接入点地址(就是路由器的Mac地址)
     public String getBSSID() {
-        return (mWifiInfo == null) ? "NULL" : mWifiInfo.getBSSID();
+        return (mWifiInfo == null) ? "" : mWifiInfo.getBSSID();
     }
 
     // 得到当前wifi设备的MAC地址,通过执行本地命令获取
@@ -80,7 +83,7 @@ public class WifiUtil {
             while (inputStream.read(bytes) != -1) {
                 result = bytes;
             }
-            String string = new String(result, "ascii");
+            String string = new String(result, "ascii").substring(0, bytes.length - 1);
             return string;
         } catch (IOException e) {
             log.error(Author.liuyongjie, e);
@@ -89,8 +92,8 @@ public class WifiUtil {
     }
 
     // 得到wifi的IP地址
-    public int getIPAddress() {
-        return (mWifiInfo == null) ? 0 : mWifiInfo.getIpAddress();
+    public String getIPAddress() {
+        return TransformUtil.intToIp(mWifiInfo.getIpAddress());
     }
 
     //获取wifi的连接速度,单位是默认是Mbps
@@ -103,6 +106,12 @@ public class WifiUtil {
         int rssi = mWifiInfo.getRssi();
         int strength = WifiManager.calculateSignalLevel(rssi, 5);
         return strength;
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    //获取当前wifi的连接频率，默认单位是MHz
+    public int getFrequency() {
+        return mWifiInfo.getFrequency();
     }
 
 }

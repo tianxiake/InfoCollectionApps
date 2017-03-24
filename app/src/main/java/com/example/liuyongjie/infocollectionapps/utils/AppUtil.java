@@ -7,15 +7,19 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 
+import com.example.liuyongjie.infocollectionapps.entity.MyAppInfo;
 import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
 import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
 import com.example.liuyongjie.infocollectionapps.log.util.Author;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 
 /**
  * Created by liuyongjie on 2016/11/22.
+ * 跟App有关的工具类都放在这个地方
  */
 
 public class AppUtil {
@@ -24,7 +28,7 @@ public class AppUtil {
         throw new UnsupportedOperationException("这是一个App工具类，不容许被实例!");
     }
 
-//    private static ILogger log = LoggerFactory.getLogger("AppUtil");
+    //    private static ILogger log = LoggerFactory.getLogger("AppUtil");
     private static ILogger log = LoggerFactory.getLogger("AppUtil");
 
 
@@ -226,6 +230,38 @@ public class AppUtil {
             log.error(Author.liuyongjie, e);
         }
         return null;
+    }
+
+    /**
+     * 获取收集已安装应用列表
+     *
+     * @param context
+     */
+    public static List<MyAppInfo> getInstallAppList(Context context) {
+        List<MyAppInfo> appInfos = null;
+        try {
+            appInfos = new ArrayList<>();
+            PackageManager packageManager = context.getPackageManager();
+            List<PackageInfo> packageInfos = packageManager.getInstalledPackages(0);
+            for (int i = 0; i < packageInfos.size(); i++) {
+                PackageInfo packageInfo = packageInfos.get(i);
+                //过滤掉系统app
+//            if ((ApplicationInfo.FLAG_SYSTEM & packageInfo.applicationInfo.flags) != 0) {
+//                continue;
+//            }
+                MyAppInfo myAppInfo = new MyAppInfo(packageInfo.packageName);
+//                if (packageInfo.applicationInfo.loadIcon(packageManager) == null) {
+//                    continue;
+//                }
+//                myAppInfo.setImage(packageInfo.applicationInfo.loadIcon(packageManager));
+//                myAppInfos.add(myAppInfo);
+                appInfos.add(myAppInfo);
+            }
+            return appInfos;
+        } catch (Exception e) {
+            log.error(Author.liuyongjie, e);
+        }
+        return appInfos;
     }
 
 }

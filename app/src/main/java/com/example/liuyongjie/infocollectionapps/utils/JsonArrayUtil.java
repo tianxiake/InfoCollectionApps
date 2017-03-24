@@ -1,9 +1,12 @@
 package com.example.liuyongjie.infocollectionapps.utils;
 
 
+import android.util.Log;
+
 import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
 import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
 import com.example.liuyongjie.infocollectionapps.log.util.Author;
+import com.example.liuyongjie.infocollectionapps.log.util.Business;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +28,7 @@ public class JsonArrayUtil<E> {
      * @param list
      * @return
      */
-    public JSONArray creatJsonArray(List<E> list) {
+    public JSONArray getJsonArray(List<E> list) {
         if (list == null || list.isEmpty()) {
             return null;
         }
@@ -34,6 +37,7 @@ public class JsonArrayUtil<E> {
             jsonArray = new JSONArray();
             E e = null;
             Class clazz = null;
+            log.verbose(Author.liuyongjie, Business.dev_test, "list长度{}", list.size());
             for (int i = 0; i < list.size(); i++) {
                 e = list.get(i);
                 clazz = e.getClass();
@@ -41,7 +45,7 @@ public class JsonArrayUtil<E> {
                 JSONObject jsonObject = new JSONObject();
                 for (int j = 0; j < fields.length; j++) {
                     //忽略编译产生的属性
-                    if (fields[i].isSynthetic()) {
+                    if (fields[j].isSynthetic()) {
                         continue;
                     }
                     //忽略serialVersionUID
@@ -59,6 +63,7 @@ public class JsonArrayUtil<E> {
         } catch (Exception e) {
             log.error(Author.liuyongjie, e);
         }
+
         return jsonArray;
     }
 }

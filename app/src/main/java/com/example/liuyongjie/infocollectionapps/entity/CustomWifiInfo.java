@@ -2,6 +2,7 @@ package com.example.liuyongjie.infocollectionapps.entity;
 
 /**
  * Created by liuyongjie on 2017/3/23.
+ * Wifi信息的实体类
  */
 
 public class CustomWifiInfo {
