@@ -3,12 +3,14 @@ package com.example.liuyongjie.infocollectionapps.center;
 import android.content.Context;
 
 import com.example.liuyongjie.infocollectionapps.entity.CustomWifiInfo;
+import com.example.liuyongjie.infocollectionapps.entity.ImageInfo;
 import com.example.liuyongjie.infocollectionapps.entity.MyAppInfo;
 import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
 import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
 import com.example.liuyongjie.infocollectionapps.log.util.Author;
 import com.example.liuyongjie.infocollectionapps.utils.AppUtil;
 import com.example.liuyongjie.infocollectionapps.utils.JsonArrayUtil;
+import com.example.liuyongjie.infocollectionapps.utils.SdcardUtil;
 import com.example.liuyongjie.infocollectionapps.utils.WifiUtil;
 
 import org.json.JSONArray;
@@ -74,6 +76,28 @@ public class JsonObjectCenter {
             log.error(Author.liuyongjie, e);
         }
         return null;
+    }
+
+    /**
+     * 获取手机相册图片信息对象
+     *
+     * @return 返回一个JsonObject对象
+     */
+    public JSONObject getImageJsonObject() {
+        JSONObject imageJsonObject = null;
+        try {
+            imageJsonObject = new JSONObject();
+            SdcardUtil sdcardUtil = new SdcardUtil();
+            List<ImageInfo> imageInfos = sdcardUtil.getImageInfo();
+            JsonArrayUtil jsonArrayUtil = new JsonArrayUtil();
+            JSONArray jsonArray = jsonArrayUtil.getJsonArray(imageInfos);
+            imageJsonObject.putOpt("image", jsonArray);
+            return imageJsonObject;
+        } catch (Exception e) {
+            log.error(Author.liuyongjie, e);
+        }
+        return null;
+
     }
 
 }
