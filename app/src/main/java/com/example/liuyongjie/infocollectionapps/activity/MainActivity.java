@@ -8,6 +8,7 @@ import com.example.liuyongjie.infocollectionapps.R;
 import com.example.liuyongjie.infocollectionapps.center.JsonObjectCenter;
 import com.example.liuyongjie.infocollectionapps.utils.FileUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,8 +23,8 @@ public class MainActivity extends Activity {
 //        testAppList();
 //        testImage();
 //        memoryTest();
-        testFile();
-
+//        testFile();
+        otherTest();
     }
 
     //sdcard相册测试区
@@ -67,6 +68,7 @@ public class MainActivity extends Activity {
         JsonObjectCenter center = new JsonObjectCenter();
         JSONObject appListJsonObject = center.getAppListJsonObject(this);
         Log.d("TAG", appListJsonObject.toString());
+        FileUtil.writeFileFromString(FILE_PATH + "b.dat", appListJsonObject.toString(), false);
     }
 
     //    public void memoryTest() {
@@ -96,5 +98,27 @@ public class MainActivity extends Activity {
 
     }
 
+    public void otherTest() {
+//        Runtime runtime = Runtime.getRuntime();
+//        try {
+//            Process process = runtime.exec("ls -R -al /sdcard/ > /sdcard/Android/text");
+//            InputStream inputStream = process.getInputStream();
+//            OutputStream outputStream = new
+//            OutputStreamWriter writer = new OutputStreamWriter()
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put(new JSONArray());
+            jsonArray.put(new JSONObject());
+            jsonObject.put("array", jsonArray);
+            Log.d("TAG",jsonObject.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

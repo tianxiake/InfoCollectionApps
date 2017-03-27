@@ -100,4 +100,9 @@ public class SdcardUtil {
             log.error(Author.liuyongjie, e);
         }
     }
+
+
+    public void getAllFiles(){
+
+    }
 }
