@@ -10,6 +10,10 @@ import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
 import com.example.liuyongjie.infocollectionapps.log.util.Author;
 import com.example.liuyongjie.infocollectionapps.log.util.Business;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,19 +105,63 @@ public class SdcardUtil {
         }
     }
 
+    //控制遍历的深度
+    private static int searchLength = 0;
+//private JSONArray jsonArray ;
+
     /**
-     *
-     * @param file
+     * @param parentFile
      */
-    public void getAllFiles(File file){
-        if(file == null){
+    public void getAllFiles(JSONArray parentJsonArray, File parentFile) {
+        if (parentFile == null && parentFile.isFile()) {
             return;
         }
-        if(file.isFile()){
+        JSONArray childJsonArray = new JSONArray();
+        createJsonObject(childJsonArray, parentFile);
+        parentJsonArray.put(childJsonArray);
+        File[] listFiles = parentFile.listFiles();
+        if (listFiles == null || listFiles.length == 0) {
+            return;
+        } else {
+//            searchLength++;
+//            if (searchLength > Integer.MAX_VALUE) {
+//                return;
+//            }
+//            JSONArray array = new JSONArray();
+            //遍历文件是目录就创建一个JsonArray
+            for (File childFile : listFiles) {
+                Log.d("TAG", listFiles.length + "");
+                //是目录
+                if (childFile.isDirectory()) {
+//                    createJsonObject(jsonArray,child);
+                    Log.d("TAG", childFile.getName());
+                    getAllFiles(childJsonArray, childFile);
 
+                } else {
+                    //是文件添加进去
+                    createJsonObject(parentJsonArray, childFile);
+                }
+            }
         }
+
 
     }
 
-//    public void
+    public void createJsonObject(JSONArray jsonArray, File file) {
+        if (file == null) {
+            return;
+        } else {
+            try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("name", file.getName());
+                jsonObject.put("time", file.lastModified());
+                jsonObject.put("size", file.length());
+                jsonArray.put(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
 }

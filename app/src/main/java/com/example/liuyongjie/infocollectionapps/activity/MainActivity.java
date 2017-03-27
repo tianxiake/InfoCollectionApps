@@ -7,6 +7,7 @@ import android.util.Log;
 import com.example.liuyongjie.infocollectionapps.R;
 import com.example.liuyongjie.infocollectionapps.center.JsonObjectCenter;
 import com.example.liuyongjie.infocollectionapps.utils.FileUtil;
+import com.example.liuyongjie.infocollectionapps.utils.SdcardUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +25,14 @@ public class MainActivity extends Activity {
 //        testImage();
 //        memoryTest();
 //        testFile();
-        otherTest();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                otherTest();
+            }
+        }.start();
+
     }
 
     //sdcard相册测试区
@@ -99,26 +107,38 @@ public class MainActivity extends Activity {
     }
 
     public void otherTest() {
-//        Runtime runtime = Runtime.getRuntime();
+////        Runtime runtime = Runtime.getRuntime();
+////        try {
+////            Process process = runtime.exec("ls -R -al /sdcard/ > /sdcard/Android/text");
+////            InputStream inputStream = process.getInputStream();
+////            OutputStream outputStream = new
+////            OutputStreamWriter writer = new OutputStreamWriter()
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////        }
+//
 //        try {
-//            Process process = runtime.exec("ls -R -al /sdcard/ > /sdcard/Android/text");
-//            InputStream inputStream = process.getInputStream();
-//            OutputStream outputStream = new
-//            OutputStreamWriter writer = new OutputStreamWriter()
-//        } catch (IOException e) {
+//            JSONObject jsonObject = new JSONObject();
+//            JSONArray jsonArray = new JSONArray();
+//            jsonArray.put(true);
+//            jsonArray.put(new JSONArray());
+//            jsonArray.put(new JSONObject());
+//            jsonArray.put(true);
+//            jsonArray.put(1.123);
+//            jsonObject.put("array", jsonArray);
+//            Log.d("TAG",jsonObject.toString());
+//        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
 
         try {
+            SdcardUtil sdcardUtil = new SdcardUtil();
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
-            jsonArray.put(true);
-            jsonArray.put(new JSONArray());
-            jsonArray.put(new JSONObject());
-            jsonArray.put(true);
-            jsonArray.put(1.123);
-            jsonObject.put("array", jsonArray);
-            Log.d("TAG",jsonObject.toString());
+            sdcardUtil.getAllFiles(jsonArray, new File("/sdcard"));
+            jsonObject.put("sdcard", jsonArray);
+            Log.d("TAG", jsonObject.toString());
+            FileUtil.writeFileFromString("/sdcard/Android/sdcard.txt",jsonObject.toString(),false);
         } catch (JSONException e) {
             e.printStackTrace();
         }
