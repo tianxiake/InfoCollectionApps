@@ -73,14 +73,20 @@ public class SdcardUtil {
                     if (fileExtension.equals(".JPG")) {
                         //读取jpg图片的内容
                         ExifInterface exifInterface = new ExifInterface(childName);
-                        String dateTime = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
                         String latitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
                         String longitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-                        Log.d("位置","latitude="+latitude+"longitude"+longitude);
+                        if (latitude == null && longitude == null) {
+                            continue;
+                        }
+                        String dateTime = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+                        String iso = exifInterface.getAttribute(ExifInterface.TAG_ISO_SPEED_RATINGS);
+                        String aperture = exifInterface.getAttribute(ExifInterface.TAG_APERTURE_VALUE);
+                        String focalLength = exifInterface.getAttribute(ExifInterface.TAG_FOCAL_LENGTH);
+                        Log.d("位置", "latitude=" + latitude + "longitude" + longitude);
                         int height = exifInterface.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, 0);
                         int width = exifInterface.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, 0);
                         String model = exifInterface.getAttribute(ExifInterface.TAG_MODEL);
-                        ImageInfo info = new ImageInfo(dateTime, latitude, longitude, height, width, model);
+                        ImageInfo info = new ImageInfo(dateTime, latitude, longitude, height, width, model, iso, aperture, focalLength);
                         imageInfos.add(info);
                     } else if (fileExtension.equals(".PNG")) {
                         //读取png图片的内容

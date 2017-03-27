@@ -18,17 +18,23 @@ public class ImageInfo {
     private int width;
     //设备型号
     private String model;
+    //感光元件的感光速度
+    private String iso;
+    //光圈值
+    private String aperture;
+    //焦距
+    private String focalLength;
 
-    public ImageInfo() {
-    }
-
-    public ImageInfo(String dataTime, String latitude, String longitude, int height, int width, String model) {
+    public ImageInfo(String dataTime, String latitude, String longitude, int height, int width, String model, String iso, String aperture, String focalLength) {
         this.dataTime = dataTime;
         this.latitude = latitude;
         this.longitude = longitude;
         this.height = height;
         this.width = width;
         this.model = model;
+        this.iso = iso;
+        this.aperture = aperture;
+        this.focalLength = focalLength;
     }
 
     public void setDataTime(String dataTime) {
@@ -80,6 +86,30 @@ public class ImageInfo {
         return model;
     }
 
+    public String getIso() {
+        return iso;
+    }
+
+    public String getAperture() {
+        return aperture;
+    }
+
+    public String getFocalLength() {
+        return focalLength;
+    }
+
+    public void setIso(String iso) {
+        this.iso = iso;
+    }
+
+    public void setAperture(String aperture) {
+        this.aperture = aperture;
+    }
+
+    public void setFocalLength(String focalLength) {
+        this.focalLength = focalLength;
+    }
+
     @Override
     public String toString() {
         return "ImageInfo{" +
@@ -89,6 +119,9 @@ public class ImageInfo {
                 ", height=" + height +
                 ", width=" + width +
                 ", model='" + model + '\'' +
+                ", iso='" + iso + '\'' +
+                ", aperture='" + aperture + '\'' +
+                ", focalLength='" + focalLength + '\'' +
                 '}';
     }
 }

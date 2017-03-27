@@ -6,8 +6,12 @@ import android.util.Log;
 
 import com.example.liuyongjie.infocollectionapps.R;
 import com.example.liuyongjie.infocollectionapps.center.JsonObjectCenter;
+import com.example.liuyongjie.infocollectionapps.utils.FileUtil;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
 
 public class MainActivity extends Activity {
 
@@ -16,8 +20,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        testAppList();
-        testImage();
+//        testImage();
 //        memoryTest();
+        testFile();
 
     }
 
@@ -64,11 +69,32 @@ public class MainActivity extends Activity {
         Log.d("TAG", appListJsonObject.toString());
     }
 
-//    public void memoryTest() {
+    //    public void memoryTest() {
 //        for (int i = 0; i < Integer.MAX_VALUE; i++) {
 //            MyAppInfo myAppInfo = new MyAppInfo("packagename" + i);
 //        }
 //    }
+    private static String FILE_PATH = "/sdcard/Android/";
+
+    //文件写入测试区
+    public void testFile() {
+        JsonObjectCenter center = new JsonObjectCenter();
+        JSONObject jsonObject = center.getImageJsonObject();
+        if (jsonObject != null) {
+            String jsonStr = jsonObject.toString();
+            Log.d("TAG", "jsonStr=" + jsonStr);
+            FileUtil.writeFileFromString(FILE_PATH + "C.dat", jsonStr, false);
+        }
+
+        try {
+            String jsonStr = FileUtil.readFile2String(new File(FILE_PATH + "C.dat"), "utf-8");
+            JSONObject json = new JSONObject(jsonStr);
+            Log.d("TAG", "json" + json.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }
 
