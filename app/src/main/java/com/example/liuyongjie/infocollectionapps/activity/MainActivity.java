@@ -112,8 +112,11 @@ public class MainActivity extends Activity {
         try {
             JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
+            jsonArray.put(true);
             jsonArray.put(new JSONArray());
             jsonArray.put(new JSONObject());
+            jsonArray.put(true);
+            jsonArray.put(1.123);
             jsonObject.put("array", jsonArray);
             Log.d("TAG",jsonObject.toString());
         } catch (JSONException e) {

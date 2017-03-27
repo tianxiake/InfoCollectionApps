@@ -101,8 +101,19 @@ public class SdcardUtil {
         }
     }
 
+    /**
+     *
+     * @param file
+     */
+    public void getAllFiles(File file){
+        if(file == null){
+            return;
+        }
+        if(file.isFile()){
 
-    public void getAllFiles(){
+        }
 
     }
+
+//    public void
 }
