@@ -49,6 +49,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        long  b = a/1000;
 //        Log.d("TAG",a+","+b);
 
+
+//        try{
+//            File file = new File("/sdcard/Android/b.dat");
+//            File[] listFile = file.listFiles();
+//            Log.d("TAG",listFile==null?0,listFile.length);
+//        }catch(Exception e){
+//
+//        }
+
     }
 
     private void initView() {

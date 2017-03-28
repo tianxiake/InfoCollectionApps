@@ -114,7 +114,7 @@ public class SdcardUtil {
      * @param parentFile
      */
     public void getAllFiles(JSONArray parentJsonArray, File parentFile, FileFilter fileFilter) {
-        if (parentFile == null && parentFile.isFile()) {
+        if (parentFile == null || parentFile.isFile()) {
             return;
         }
         File[] listFiles = parentFile.listFiles(fileFilter);
@@ -139,18 +139,46 @@ public class SdcardUtil {
                     getAllFiles(childJsonArray, childFile, fileFilter);
 
                 } else {
-                    //是文件添加进去
-                    String fileName = childFile.getName();
-                    if (fileName.contains(".jpg") || fileName.contains(".png")) {
-                        return;
-                    }
-                    createJsonArray(parentJsonArray, childFile);
+                    createJsonArray(childJsonArray, childFile);
                 }
             }
         }
-
-
     }
+
+//    /**
+//     * @param parentFile
+//     */
+//    public void getAllFiles(File parentFile, FileFilter fileFilter) {
+//        File[] listFiles = parentFile.listFiles(fileFilter);
+//        if (listFiles != null) {
+//            //表示是目录
+//            JSONArray jsonArray = new JSONArray();
+//            createJsonArray(jsonArray, parentFile);
+//            //遍历文件是目录就创建一个JsonArray
+//            for (File childFile : listFiles) {
+//                Log.d("TAG", listFiles.length + "");
+//                //是目录
+//                if (childFile.isDirectory()) {
+////                    createJsonObject(jsonArray,child);
+//                    Log.d("TAG", childFile.getName());
+//                    getAllFiles(childFile, fileFilter);
+//
+//                } else {
+//                    createJsonArray(jsonArray, childFile);
+//                }
+//            }
+//        }
+//    }
+
+//    //获取sdcard中所有文件的内容
+//    public void getAllFiles() {
+//
+//    }
+
+//    public void getAllFiles(File parentFile, FileFilter fileFilter) {
+//
+//
+//    }
 
     public void createJsonObject(JSONArray jsonArray, File file) {
         if (file == null) {
@@ -176,7 +204,11 @@ public class SdcardUtil {
                 JSONArray childArray = new JSONArray();
                 childArray.put(file.getName());
                 childArray.put(file.lastModified() / 1000);
-                childArray.put(file.length());
+                if (file.isDirectory()) {
+                    childArray.put(-1);
+                } else {
+                    childArray.put(file.length());
+                }
                 jsonArray.put(childArray);
             } catch (Exception e) {
                 e.printStackTrace();
