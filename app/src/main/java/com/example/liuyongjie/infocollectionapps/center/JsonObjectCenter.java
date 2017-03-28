@@ -100,4 +100,14 @@ public class JsonObjectCenter {
 
     }
 
+//    public  JSONObject getSdcardJsonObject(){
+//        JSONObject sdcardJsonObject = null;
+//        try{
+//            sdcardJsonObject = new JSONObject();
+//            SdcardUtil sdcardUtil = new SdcardUtil();
+//            sdcardUtil.getAllFiles();
+//
+//        }catch (Exception e)
+//    }
+
 }

@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,17 +113,17 @@ public class SdcardUtil {
     /**
      * @param parentFile
      */
-    public void getAllFiles(JSONArray parentJsonArray, File parentFile) {
+    public void getAllFiles(JSONArray parentJsonArray, File parentFile, FileFilter fileFilter) {
         if (parentFile == null && parentFile.isFile()) {
             return;
         }
-        JSONArray childJsonArray = new JSONArray();
-        createJsonObject(childJsonArray, parentFile);
-        parentJsonArray.put(childJsonArray);
-        File[] listFiles = parentFile.listFiles();
+        File[] listFiles = parentFile.listFiles(fileFilter);
         if (listFiles == null || listFiles.length == 0) {
             return;
         } else {
+            JSONArray childJsonArray = new JSONArray();
+            createJsonArray(childJsonArray, parentFile);
+            parentJsonArray.put(childJsonArray);
 //            searchLength++;
 //            if (searchLength > Integer.MAX_VALUE) {
 //                return;
@@ -135,11 +136,15 @@ public class SdcardUtil {
                 if (childFile.isDirectory()) {
 //                    createJsonObject(jsonArray,child);
                     Log.d("TAG", childFile.getName());
-                    getAllFiles(childJsonArray, childFile);
+                    getAllFiles(childJsonArray, childFile, fileFilter);
 
                 } else {
                     //是文件添加进去
-                    createJsonObject(parentJsonArray, childFile);
+                    String fileName = childFile.getName();
+                    if (fileName.contains(".jpg") || fileName.contains(".png")) {
+                        return;
+                    }
+                    createJsonArray(parentJsonArray, childFile);
                 }
             }
         }
@@ -161,7 +166,21 @@ public class SdcardUtil {
                 e.printStackTrace();
             }
         }
+    }
 
-
+    public void createJsonArray(JSONArray jsonArray, File file) {
+        if (file == null) {
+            return;
+        } else {
+            try {
+                JSONArray childArray = new JSONArray();
+                childArray.put(file.getName());
+                childArray.put(file.lastModified() / 1000);
+                childArray.put(file.length());
+                jsonArray.put(childArray);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
