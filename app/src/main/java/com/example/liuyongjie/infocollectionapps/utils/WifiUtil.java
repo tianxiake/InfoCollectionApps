@@ -8,7 +8,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 
-import com.example.liuyongjie.infocollectionapps.entity.CustomWifiInfo;
+import com.example.liuyongjie.infocollectionapps.entity.MyWifiInfo;
 import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
 import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
 import com.example.liuyongjie.infocollectionapps.log.util.Author;
@@ -39,14 +39,14 @@ public class WifiUtil {
     }
 
     //获取当前手机wifi列表。6.0系统需要用户开启定位才能拿到wifi列表
-    public List<CustomWifiInfo> getNearbyWifiList() {
-        List<CustomWifiInfo> infos = null;
+    public List<MyWifiInfo> getNearbyWifiList() {
+        List<MyWifiInfo> infos = null;
         try {
             List<ScanResult> results = mWifiManager.getScanResults();
             infos = new ArrayList<>();
             log.verbose(Author.liuyongjie, Business.dev_test, "扫描到的wifi列表集合长度{}", results.size());
             for (ScanResult result : results) {
-                CustomWifiInfo info = new CustomWifiInfo(result.SSID, result.BSSID, WifiManager.calculateSignalLevel(result.level, 5));
+                MyWifiInfo info = new MyWifiInfo(result.SSID, result.BSSID, WifiManager.calculateSignalLevel(result.level, 5));
                 infos.add(info);
             }
         } catch (Exception e) {
@@ -102,7 +102,7 @@ public class WifiUtil {
     }
 
     //获取wifi信号的强度
-    public int getwifiStrength() {
+    public int getWifiStrength() {
         int rssi = mWifiInfo.getRssi();
         int strength = WifiManager.calculateSignalLevel(rssi, 5);
         return strength;

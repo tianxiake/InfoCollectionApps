@@ -14,7 +14,6 @@ import java.util.TimeZone;
 import static android.content.Context.TELEPHONY_SERVICE;
 
 
-
 /**
  * Created by liuyongjie on 2016/11/23.
  */
@@ -82,8 +81,7 @@ public class DeviceUtil {
     public static String getSimSerialNumber(Context context) {
         try {
             TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            String serialNumber = telephonyManager.getSimSerialNumber();
-            return serialNumber;
+            return telephonyManager.getSimSerialNumber();
         } catch (Exception e) {
             log.error(Author.liuyongjie, e);
         }

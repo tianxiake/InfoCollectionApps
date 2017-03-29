@@ -1,10 +1,7 @@
 package com.example.liuyongjie.infocollectionapps.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,7 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.liuyongjie.infocollectionapps.R;
-import com.example.liuyongjie.infocollectionapps.center.JsonObjectCenter;
+import com.example.liuyongjie.infocollectionapps.center.DataCenter;
 import com.example.liuyongjie.infocollectionapps.utils.FileUtil;
 import com.example.liuyongjie.infocollectionapps.utils.SdcardUtil;
 import com.example.liuyongjie.infocollectionapps.utils.ToastUtil;
@@ -25,7 +22,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.util.List;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     private Button sensorButton;
@@ -41,23 +37,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        testImage();
 //        memoryTest();
 //        testFile();
-        startThread();
+//        startThread();
 //        fileFilterTest();
 //        zipTest();
 //        sensorsTest();
-//        long a = Long.MAX_VALUE;
-//        long  b = a/1000;
-//        Log.d("TAG",a+","+b);
-
-
-//        try{
-//            File file = new File("/sdcard/Android/b.dat");
-//            File[] listFile = file.listFiles();
-//            Log.d("TAG",listFile==null?0,listFile.length);
-//        }catch(Exception e){
-//
-//        }
-
     }
 
     private void initView() {
@@ -68,16 +51,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         sensorButton.setOnClickListener(this);
     }
 
+//
+//    public void sensorsTest() {
+//        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+//        List<Sensor> listSensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
+//        for (Sensor sensor : listSensors) {
+//            Log.d("TAG", sensor.getName() + "," + sensor.getPower());
+//        }
+//
+//    }
 
-    public void sensorsTest() {
-        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        List<Sensor> listSensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
-        for (Sensor sensor : listSensors) {
-            Log.d("TAG", sensor.getName() + "," + sensor.getPower());
-        }
-
-    }
-
+    //往sdcard中写入文件
     private void startThread() {
         new Thread() {
             @Override
@@ -90,7 +74,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     //sdcard相册测试区
     public void testImage() {
-        JsonObjectCenter center = new JsonObjectCenter();
+        DataCenter center = new DataCenter();
         JSONObject imageJsonObject = center.getImageJsonObject();
         int byteCount = imageJsonObject.toString().getBytes().length;
         Log.d("TAG", "content=" + imageJsonObject.toString());
@@ -99,14 +83,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     //wifi 信息测试区
     public void testWifiInfo() {
-        JsonObjectCenter jsonObjectUtil = new JsonObjectCenter();
+        DataCenter jsonObjectUtil = new DataCenter();
         JSONObject jsonObject = jsonObjectUtil.getWifiJsonObject(this);
         Log.d("TAG", jsonObject.toString());
     }
 
     //应用列表测试区
     public void testAppList() {
-        JsonObjectCenter center = new JsonObjectCenter();
+        DataCenter center = new DataCenter();
         JSONObject appListJsonObject = center.getAppListJsonObject(this);
         Log.d("TAG", appListJsonObject.toString());
         FileUtil.writeFileFromString(FILE_PATH + "b.dat", appListJsonObject.toString(), false);
@@ -121,7 +105,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     //文件写入测试区
     public void testFile() {
-        JsonObjectCenter center = new JsonObjectCenter();
+        DataCenter center = new DataCenter();
         JSONObject jsonObject = center.getImageJsonObject();
         if (jsonObject != null) {
             String jsonStr = jsonObject.toString();

@@ -9,7 +9,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 
-import com.example.liuyongjie.infocollectionapps.entity.CustomWifiInfo;
+import com.example.liuyongjie.infocollectionapps.entity.MyWifiInfo;
 import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
 import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
 import com.example.liuyongjie.infocollectionapps.log.util.Author;
@@ -47,11 +47,11 @@ public class MyWifiUtil {
     }
 
     //获取当前手机wifi列表。6.0系统需要用户开启定位才能拿到wifi列表
-    public List<CustomWifiInfo> getNearbyWifiList() {
+    public List<MyWifiInfo> getNearbyWifiList() {
         List<ScanResult> results = mWifiManager.getScanResults();
-        List<CustomWifiInfo> infos = new ArrayList<>();
+        List<MyWifiInfo> infos = new ArrayList<>();
         for (ScanResult result : results) {
-            CustomWifiInfo info = new CustomWifiInfo(result.SSID, result.BSSID, result.level);
+            MyWifiInfo info = new MyWifiInfo(result.SSID, result.BSSID, result.level);
             infos.add(info);
         }
         return infos;

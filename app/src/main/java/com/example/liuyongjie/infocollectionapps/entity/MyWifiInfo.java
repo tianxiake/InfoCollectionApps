@@ -5,19 +5,15 @@ package com.example.liuyongjie.infocollectionapps.entity;
  * Wifi信息的实体类
  */
 
-public class CustomWifiInfo {
+public class MyWifiInfo {
     //wifi的名称
     private String ssid;
-    //wifi的接入点地址
+    //wifi的接入点地址(路由器的ip地址)
     private String bssid;
     //wifi网络连接的优先数
     private int level;
-//    //wifi的mac地址
-//    private String macAddress;
-//    //wifi的ip地址
-//    private String ipAddress;
 
-    public CustomWifiInfo(String ssid, String bssid, int level) {
+    public MyWifiInfo(String ssid, String bssid, int level) {
         this.ssid = ssid;
         this.bssid = bssid;
         this.level = level;
@@ -35,13 +31,6 @@ public class CustomWifiInfo {
         return level;
     }
 
-//    public String getMacAddress() {
-//        return macAddress;
-//    }
-//
-//    public String getIpAddress() {
-//        return ipAddress;
-//    }
 
     public void setSsid(String ssid) {
         this.ssid = ssid;
@@ -55,18 +44,9 @@ public class CustomWifiInfo {
         this.level = level;
     }
 
-//    public void setMacAddress(String macAddress) {
-//        this.macAddress = macAddress;
-//    }
-//
-//    public void setIpAddress(String ipAddress) {
-//        this.ipAddress = ipAddress;
-//    }
-
-
     @Override
     public String toString() {
-        return "CustomWifiInfo{" +
+        return "MyWifiInfo{" +
                 "ssid='" + ssid + '\'' +
                 ", bssid='" + bssid + '\'' +
                 ", level=" + level +
