@@ -154,13 +154,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void otherTest() {
         try {
             SdcardUtil sdcardUtil = new SdcardUtil();
-            JSONObject jsonObject = new JSONObject();
+//            JSONObject jsonObject = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             sdcardUtil.getAllFiles(jsonArray, new File("/sdcard"), fileFilter);
-            jsonObject.put("sdcard", jsonArray);
-            Log.d("TAG", jsonObject.toString());
-            FileUtil.writeFileFromString("/sdcard/Android/sdcard.txt", jsonObject.toString(), false);
-        } catch (JSONException e) {
+//            jsonObject.put("sdcard", jsonArray);
+//            Log.d("TAG", jsonObject.toString());
+            FileUtil.writeFileFromString("/sdcard/Android/sdcard.txt", jsonArray.toString(), false);
+            Log.d("TAG", jsonArray.toString());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

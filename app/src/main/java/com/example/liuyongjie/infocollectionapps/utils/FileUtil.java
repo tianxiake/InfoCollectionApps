@@ -53,15 +53,15 @@ public class FileUtil {
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
     public static boolean writeFileFromString(String filePath, String content, boolean append) {
-        File file = new File(filePath);
-        if (file == null || content == null) return false;
-        if (!createOrExistsFile(file)) return false;
         BufferedWriter bw = null;
         try {
+            File file = new File(filePath);
+            if (file == null || content == null) return false;
+            if (!createOrExistsFile(file)) return false;
             bw = new BufferedWriter(new FileWriter(file, append));
             bw.write(content);
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error(Author.liuyongjie, e);
         } finally {
             CloseUtil.closeIO(bw);
@@ -150,7 +150,6 @@ public class FileUtil {
         }
         return null;
     }
-
 
 
 }
