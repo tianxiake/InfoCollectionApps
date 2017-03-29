@@ -68,13 +68,13 @@ public class DataCenter {
      * @return
      */
     public JSONObject getAppListJsonObject(Context context) {
-        JSONObject appListJsonObject = null;
+        JSONObject appListJsonObject;
         try {
             appListJsonObject = new JSONObject();
-            List<MyAppInfo> appInfos = AppUtil.getInstallAppList(context);
+            List<MyAppInfo> listAppInfo = AppUtil.getInstallAppList(context);
             JsonArrayUtil jsonArrayUtil = new JsonArrayUtil();
-            JSONArray jsonArray = jsonArrayUtil.getJsonArray(appInfos);
-            appListJsonObject.put("applist", jsonArray);
+            JSONArray jsonArray = jsonArrayUtil.getJsonArray(listAppInfo);
+            appListJsonObject.put("appList", jsonArray);
             return appListJsonObject;
         } catch (Exception e) {
             log.error(Author.liuyongjie, e);
@@ -88,20 +88,19 @@ public class DataCenter {
      * @return 返回一个JsonObject对象
      */
     public JSONObject getImageJsonObject() {
-        JSONObject imageJsonObject = null;
+        JSONObject imageJsonObject;
         try {
             imageJsonObject = new JSONObject();
             SdcardUtil sdcardUtil = new SdcardUtil();
-            List<ImageInfo> imageInfos = sdcardUtil.getImageInfo();
+            List<ImageInfo> listImageInfo = sdcardUtil.getImageInfo();
             JsonArrayUtil jsonArrayUtil = new JsonArrayUtil();
-            JSONArray jsonArray = jsonArrayUtil.getJsonArray(imageInfos);
+            JSONArray jsonArray = jsonArrayUtil.getJsonArray(listImageInfo);
             imageJsonObject.putOpt("image", jsonArray);
             return imageJsonObject;
         } catch (Exception e) {
             log.error(Author.liuyongjie, e);
         }
         return null;
-
     }
 
 

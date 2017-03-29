@@ -1,6 +1,8 @@
 package com.example.liuyongjie.infocollectionapps.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +35,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         initView();
         setListener();
 
+//        InnerBroadCastReceiver broadCastReceiver = new InnerBroadCastReceiver();
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+//        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+//        registerReceiver(broadCastReceiver,filter);
 //        testAppList();
 //        testImage();
 //        memoryTest();
@@ -41,6 +48,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        fileFilterTest();
 //        zipTest();
 //        sensorsTest();
+
     }
 
     private void initView() {
@@ -192,6 +200,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         Intent intent = new Intent(this, SensorActivity.class);
         startActivity(intent);
+    }
+
+    //动态广播
+    public class InnerBroadCastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("TAG", intent.getAction());
+        }
     }
 }
 
