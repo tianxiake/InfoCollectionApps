@@ -2,7 +2,7 @@ package com.example.liuyongjie.infocollectionapps;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.Arrays;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -11,7 +11,9 @@ import static org.junit.Assert.*;
  */
 public class ExampleUnitTest {
     @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+    public void arrayTest() {
+        int[] a = new int[1024];
+        System.out.println(a.length);
+        System.out.println(Arrays.toString(a));
     }
 }

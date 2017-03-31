@@ -49,6 +49,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        zipTest();
 //        sensorsTest();
 
+//        try {
+//            TimeUtil.currentTime("Time", "start");
+//            FileRWTest fileRWTest = new FileRWTest();
+//            fileRWTest.readFileToFile("/sdcard/Android/text.txt", "/sdcard/Android/dest.txt");
+//            TimeUtil.currentTime("Time", "end");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void initView() {
@@ -106,7 +114,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     //    public void memoryTest() {
 //        for (int i = 0; i < Integer.MAX_VALUE; i++) {
-//            MyAppInfo myAppInfo = new MyAppInfo("packagename" + i);
+//            MyAppInfo myAppInfo = new MyAppInfo("packageName" + i);
 //        }
 //    }
     private static String FILE_PATH = "/sdcard/Android/";

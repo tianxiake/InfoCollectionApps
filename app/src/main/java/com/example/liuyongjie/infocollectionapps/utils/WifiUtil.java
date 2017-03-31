@@ -40,19 +40,19 @@ public class WifiUtil {
 
     //获取当前手机wifi列表。6.0系统需要用户开启定位才能拿到wifi列表
     public List<MyWifiInfo> getNearbyWifiList() {
-        List<MyWifiInfo> infos = null;
+        List<MyWifiInfo> listWifiInfo = null;
         try {
             List<ScanResult> results = mWifiManager.getScanResults();
-            infos = new ArrayList<>();
+            listWifiInfo = new ArrayList<>();
             log.verbose(Author.liuyongjie, Business.dev_test, "扫描到的wifi列表集合长度{}", results.size());
             for (ScanResult result : results) {
                 MyWifiInfo info = new MyWifiInfo(result.SSID, result.BSSID, WifiManager.calculateSignalLevel(result.level, 5));
-                infos.add(info);
+                listWifiInfo.add(info);
             }
         } catch (Exception e) {
             log.error(Author.liuyongjie, e);
         }
-        return infos;
+        return listWifiInfo;
     }
 
     //返回客户端的状态信息,返回值是一个枚举值,

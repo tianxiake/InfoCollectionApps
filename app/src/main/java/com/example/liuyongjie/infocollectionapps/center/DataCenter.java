@@ -50,10 +50,13 @@ public class DataCenter {
             wifiJsonObject.put("level", wifiUtil.getWifiStrength());
             //jsonArray部分
             List<MyWifiInfo> listWifiInfo = wifiUtil.getNearbyWifiList();
-            JsonArrayUtil jsonArrayUtil = new JsonArrayUtil();
-            JSONArray wifiArray = jsonArrayUtil.getJsonArray(listWifiInfo);
-            //jsonArray部分
-            wifiJsonObject.put("nearbyWifi", wifiArray);
+            log.verbose(Author.liuyongjie, Business.dev_test, "listWifiInfo={}", listWifiInfo);
+            if (listWifiInfo != null) {
+                JsonArrayUtil jsonArrayUtil = new JsonArrayUtil();
+                JSONArray wifiArray = jsonArrayUtil.getJsonArray(listWifiInfo);
+                //jsonArray部分
+                wifiJsonObject.put("nearbyWifi", wifiArray);
+            }
             return wifiJsonObject;
         } catch (Exception e) {
             log.error(Author.liuyongjie, e);

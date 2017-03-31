@@ -45,7 +45,7 @@ public class SensorActivity extends Activity implements SensorEventListener {
                 //清除容器中的所有数据
                 listBuilder.clear();
             }
-            Log.v("TAG", "writeTime start=" + System.currentTimeMillis());
+            Log.v("TAG", "writeTime end=" + System.currentTimeMillis());
             handler.postDelayed(this, timeControl);
             openDoor = true;
             doorOpenTime = System.currentTimeMillis();
