@@ -21,7 +21,7 @@ public class JsonArrayUtil<E> {
     private static final ILogger log = LoggerFactory.getLogger("JsonArrayUtil");
 
     /**
-     * 给定任意一个集合，可以构建一个JSonArray对象
+     * 给定任意一个List<E>对象，可以构建一个JSONArray对象,这个JSONArray对象中包含一个个的JSONObject对象就是List<E>中的数据
      *
      * @param list
      * @return

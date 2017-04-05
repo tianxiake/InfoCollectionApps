@@ -54,10 +54,10 @@ public class SdcardUtil {
     }
 
     /**
-     * @param dirFile    目录文件对象
-     * @param imageInfos list集合
+     * @param dirFile  目录文件对象
+     * @param listInfo list集合
      */
-    private void getImageInfo(File dirFile, List<ImageInfo> imageInfos) {
+    private void getImageInfo(File dirFile, List<ImageInfo> listInfo) {
         try {
             if (dirFile == null) {
                 return;
@@ -70,7 +70,7 @@ public class SdcardUtil {
             for (File childFile : listFiles) {
                 //是目录
                 if (childFile.isDirectory()) {
-                    getImageInfo(childFile, imageInfos);
+                    getImageInfo(childFile, listInfo);
                 } else if (childFile.isFile()) {//是文件就处理
                     String childName = childFile.getAbsolutePath();
                     String fileExtension = childName.substring(childName.length() - 4).toUpperCase();
@@ -92,7 +92,7 @@ public class SdcardUtil {
                         int width = exifInterface.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, 0);
                         String model = exifInterface.getAttribute(ExifInterface.TAG_MODEL);
                         ImageInfo info = new ImageInfo(dateTime, latitude, longitude, height, width, model, iso, aperture, focalLength);
-                        imageInfos.add(info);
+                        listInfo.add(info);
                     } else if (fileExtension.equals(".PNG")) {
                         //读取png图片的内容
                     } else {
