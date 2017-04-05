@@ -12,7 +12,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.liuyongjie.infocollectionapps.R;
-import com.example.liuyongjie.infocollectionapps.utils.FileUtil;
+import com.example.liuyongjie.infocollectionapps.util.FileUtil;
 
 import org.json.JSONArray;
 

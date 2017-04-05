@@ -1,8 +1,6 @@
-package com.example.liuyongjie.infocollectionapps.utils;
+package com.example.liuyongjie.infocollectionapps.util;
 
 import android.util.Log;
-
-import static android.R.attr.start;
 
 /**
  * Created by liuyongjie on 201o/3/31.

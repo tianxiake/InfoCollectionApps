@@ -1,6 +1,11 @@
-package com.example.liuyongjie.infocollectionapps.utils;
+package com.example.liuyongjie.infocollectionapps.util;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by liuyongjie on 2017/3/23.
@@ -16,7 +21,7 @@ public class StringUtil {
      */
     public String macBytes2MacStr(byte[] macBytes) {
         if (macBytes == null) {
-            return "";
+            return null;
         }
         try {
             String string = new String(macBytes, "ascii");
@@ -24,7 +29,7 @@ public class StringUtil {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return "";
+        return null;
     }
 
     /**
@@ -257,9 +262,34 @@ public class StringUtil {
      * @param content
      * @return
      */
-    public static byte[] stringToByte(String content) {
+    public static byte[] stringToByteArray(String content) {
+        if (content == null) {
+            return null;
+        }
         byte[] bytes = content.getBytes();
         return bytes;
+    }
+
+    /**
+     * 字节数组转换为字符串
+     *
+     * @param byteArray   字节数组
+     * @param charsetName 指定编码的方式
+     */
+    public static String byteArratToString(byte[] byteArray, String charsetName) {
+        if (byteArray == null) {
+            return null;
+        }
+        if (charsetName == null) {
+            charsetName = "utf-8";
+        }
+        try {
+            String content = new String(byteArray, charsetName);
+            return content;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -290,18 +320,216 @@ public class StringUtil {
     }
 
     /**
-     * int ip转换为ip
+     * int型ip转换为字符串ip
+     *
      * @param ipInt
      * @return
      */
     public static byte[] intToBytes(int ipInt) {
-        byte[] ipAddr = new byte[4];
-        ipAddr[3] = (byte) ((ipInt >>> 24) & 0xFF);
-        ipAddr[2] = (byte) ((ipInt >>> 16) & 0xFF);
-        ipAddr[1] = (byte) ((ipInt >>> 8) & 0xFF);
-        ipAddr[0] = (byte) (ipInt & 0xFF);
-        return ipAddr;
+        byte[] ipAddress = new byte[4];
+        ipAddress[3] = (byte) ((ipInt >>> 24) & 0xFF);
+        ipAddress[2] = (byte) ((ipInt >>> 16) & 0xFF);
+        ipAddress[1] = (byte) ((ipInt >>> 8) & 0xFF);
+        ipAddress[0] = (byte) (ipInt & 0xFF);
+        return ipAddress;
     }
 
+    /**
+     * 得到字符串中某个字符的个数
+     *
+     * @param str 字符串
+     * @param c   字符
+     * @return
+     */
+    public static final int getCharnum(String str, char c) {
+        int num = 0;
+        char[] chars = str.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (c == chars[i]) {
+                num++;
+            }
+        }
+
+        return num;
+    }
+
+
+    /**
+     * 返回yyyymm
+     *
+     * @param aDate
+     * @return
+     */
+    public static final String getYear_Month(Date aDate) {
+        SimpleDateFormat df = null;
+        String returnValue = "";
+
+        if (aDate != null) {
+            df = new SimpleDateFormat("yyyyMM");
+            returnValue = df.format(aDate);
+        }
+
+        return (returnValue);
+    }
+
+    /**
+     * hxw 返回当前年
+     *
+     * @return
+     */
+    public static String getYear() {
+        Calendar calendar = Calendar.getInstance();
+        return String.valueOf(calendar.get(Calendar.YEAR));
+    }
+
+    /**
+     * hxw 返回当前月
+     *
+     * @return
+     */
+    public static String getMonth() {
+        Calendar calendar = Calendar.getInstance();
+        String temp = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        if (temp.length() < 2)
+            temp = "0" + temp;
+        return temp;
+    }
+
+
+    /**
+     * 按长度分割字符串
+     *
+     * @param content
+     * @param len
+     * @return
+     */
+    public static String[] split(String content, int len) {
+        if (content == null || content.equals("")) {
+            return null;
+        }
+        int len2 = content.length();
+        if (len2 <= len) {
+            return new String[]{content};
+        } else {
+            int i = len2 / len + 1;
+            System.out.println("i:" + i);
+            String[] strA = new String[i];
+            int j = 0;
+            int begin = 0;
+            int end = 0;
+            while (j < i) {
+                begin = j * len;
+                end = (j + 1) * len;
+                if (end > len2)
+                    end = len2;
+                strA[j] = content.substring(begin, end);
+                // System.out.println(strA[j]+"<br/>");
+                j = j + 1;
+            }
+            return strA;
+        }
+    }
+
+    public static boolean emailFormat(String email) {
+        boolean tag = true;
+        final String pattern1 = "^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        final Pattern pattern = Pattern.compile(pattern1);
+        final Matcher mat = pattern.matcher(email);
+        if (!mat.find()) {
+            tag = false;
+        }
+        return tag;
+    }
+
+
+    /**
+     * 验证是不是EMAIL
+     *
+     * @param email
+     * @return
+     */
+    public static boolean isEmail(String email) {
+        boolean retval = false;
+        String check = "^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        Pattern regex = Pattern.compile(check);
+        Matcher matcher = regex.matcher(email);
+        retval = matcher.matches();
+        return retval;
+    }
+
+    /**
+     * 验证汉字为true
+     *
+     * @param s
+     * @return
+     */
+    public static boolean isLetterorDigit(String s) {
+        if (s.equals("") || s == null) {
+            return false;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (!Character.isLetterOrDigit(s.charAt(i))) {
+                // if (!Character.isLetter(s.charAt(i))){
+                return false;
+            }
+        }
+        // Character.isJavaLetter()
+        return true;
+    }
+
+    /**
+     * 判断一个字符串是否都为数字
+     *
+     * @param strNum
+     * @return
+     */
+    public static boolean isDigit(String strNum) {
+        return strNum.matches("[0-9]{1,}");
+    }
+
+    /**
+     * 判断一个字符串是否都为数字
+     *
+     * @param strNum
+     * @return
+     */
+    public static boolean isDigit2(String strNum) {
+        Pattern pattern = Pattern.compile("[0-9]{1,}");
+        Matcher matcher = pattern.matcher(strNum);
+        return matcher.matches();
+    }
+
+    /**
+     * 日期转String
+     *
+     * @param pattern
+     * @return
+     */
+    public static String now(String pattern) {
+        return dateToString(new Date(), pattern);
+    }
+
+    public static String dateToString(Date date, String pattern) {
+        if (date == null) {
+            return "";
+        } else {
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+            return sdf.format(date);
+        }
+    }
+
+    /**
+     * 字符串转化为int值
+     *
+     * @return 返回-1表示字符串转换失败，字符串不符合条件
+     */
+    public static int StringToInt(String content) {
+        try {
+            return Integer.parseInt(content);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 
 }

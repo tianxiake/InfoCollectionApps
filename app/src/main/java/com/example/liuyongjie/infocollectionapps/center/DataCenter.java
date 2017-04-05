@@ -2,18 +2,18 @@ package com.example.liuyongjie.infocollectionapps.center;
 
 import android.content.Context;
 
-import com.example.liuyongjie.infocollectionapps.entity.MyWifiInfo;
 import com.example.liuyongjie.infocollectionapps.entity.ImageInfo;
 import com.example.liuyongjie.infocollectionapps.entity.MyAppInfo;
+import com.example.liuyongjie.infocollectionapps.entity.MyWifiInfo;
 import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
 import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
 import com.example.liuyongjie.infocollectionapps.log.util.Author;
 import com.example.liuyongjie.infocollectionapps.log.util.Business;
-import com.example.liuyongjie.infocollectionapps.utils.AppUtil;
-import com.example.liuyongjie.infocollectionapps.utils.FileUtil;
-import com.example.liuyongjie.infocollectionapps.utils.JsonArrayUtil;
-import com.example.liuyongjie.infocollectionapps.utils.SdcardUtil;
-import com.example.liuyongjie.infocollectionapps.utils.WifiUtil;
+import com.example.liuyongjie.infocollectionapps.util.AppUtil;
+import com.example.liuyongjie.infocollectionapps.util.FileUtil;
+import com.example.liuyongjie.infocollectionapps.util.JsonArrayUtil;
+import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
+import com.example.liuyongjie.infocollectionapps.util.WifiUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class DataCenter {
 
-    private ILogger log = LoggerFactory.getLogger("DataCenter");
+    private static final ILogger log = LoggerFactory.getLogger("DataCenter");
 
     /**
      * 获取一个完整的wifi信息的JsonObject

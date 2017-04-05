@@ -11,8 +11,8 @@ import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
 import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
 import com.example.liuyongjie.infocollectionapps.log.util.Author;
 import com.example.liuyongjie.infocollectionapps.log.util.Business;
-import com.example.liuyongjie.infocollectionapps.utils.FileUtil;
-import com.example.liuyongjie.infocollectionapps.utils.GlobalConstant;
+import com.example.liuyongjie.infocollectionapps.util.FilePathConstants;
+import com.example.liuyongjie.infocollectionapps.util.FileUtil;
 
 import org.json.JSONObject;
 
@@ -35,7 +35,7 @@ public class MyBroadCastReceiver extends BroadcastReceiver {
             if (wifiInfo != null) {
                 DataCenter center = new DataCenter();
                 JSONObject wifiJsonObject = center.getWifiJsonObject(LoggerFactory.getRealContext());
-                boolean isSuccess = FileUtil.writeFileFromString(GlobalConstant.SENSOR_PATH, wifiJsonObject.toString(), false);
+                boolean isSuccess = FileUtil.writeFileFromString(FilePathConstants.SENSOR_PATH, wifiJsonObject.toString(), false);
                 if (isSuccess) {
                     //发送文件到服务器,并且删掉文件
                 }

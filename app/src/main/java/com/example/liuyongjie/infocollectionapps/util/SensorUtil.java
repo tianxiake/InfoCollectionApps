@@ -1,4 +1,4 @@
-package com.example.liuyongjie.infocollectionapps.utils;
+package com.example.liuyongjie.infocollectionapps.util;
 
 /**
  * Created by liuyongjie on 2017/3/28.

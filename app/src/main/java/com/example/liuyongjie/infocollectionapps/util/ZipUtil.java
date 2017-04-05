@@ -1,4 +1,4 @@
-package com.example.liuyongjie.infocollectionapps.utils;
+package com.example.liuyongjie.infocollectionapps.util;
 
 import android.text.TextUtils;
 
@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import static com.example.liuyongjie.infocollectionapps.utils.StringUtil.isSpace;
+import static com.example.liuyongjie.infocollectionapps.util.StringUtil.isSpace;
 
 /**
  * Created by liuyongjie on 2017/3/28.

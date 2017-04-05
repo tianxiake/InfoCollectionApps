@@ -1,4 +1,4 @@
-package com.example.liuyongjie.infocollectionapps.utils;
+package com.example.liuyongjie.infocollectionapps.util;
 
 import java.io.Closeable;
 import java.io.IOException;

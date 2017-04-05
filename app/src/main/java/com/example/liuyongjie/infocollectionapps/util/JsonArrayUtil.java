@@ -1,7 +1,5 @@
-package com.example.liuyongjie.infocollectionapps.utils;
+package com.example.liuyongjie.infocollectionapps.util;
 
-
-import android.util.Log;
 
 import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
 import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
@@ -20,7 +18,7 @@ import java.util.List;
  */
 
 public class JsonArrayUtil<E> {
-    private static ILogger log = LoggerFactory.getLogger("JsonArrayUtil");
+    private static final ILogger log = LoggerFactory.getLogger("JsonArrayUtil");
 
     /**
      * 给定任意一个集合，可以构建一个JSonArray对象
@@ -63,7 +61,6 @@ public class JsonArrayUtil<E> {
         } catch (Exception e) {
             log.error(Author.liuyongjie, e);
         }
-
         return jsonArray;
     }
 }
