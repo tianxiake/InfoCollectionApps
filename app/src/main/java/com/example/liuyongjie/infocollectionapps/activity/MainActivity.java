@@ -13,11 +13,11 @@ import android.widget.Toast;
 
 import com.example.liuyongjie.infocollectionapps.R;
 import com.example.liuyongjie.infocollectionapps.center.DataCenter;
-import com.example.liuyongjie.infocollectionapps.util.LYJAESUtil;
 import com.example.liuyongjie.infocollectionapps.util.FileUtil;
 import com.example.liuyongjie.infocollectionapps.util.HttpUtil;
 import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
 import com.example.liuyongjie.infocollectionapps.util.ToastUtil;
+import com.example.liuyongjie.infocollectionapps.util.UploadFile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +53,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
             "TvOxjSYDVMc10N1Zy/k8lZcuMid70O5VG5KZ3O3vCS0IIqp3qLi/jBBVwV1jm3Zl87fhOE6U540B" +
             "06ogXyEdwnLLyCvTrFiK5EsyCzjnE66X9OJ1+hxp+BCFQbxlMBYduBSltwIDAQAB";
 
+    public static String sk =
+            "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJ9gPddugdnSW7NhHbE309hQ9UEW" +
+            "atZ2QnpSaxfvXkbAAGl2VYB1WLPdtKiZArk3EdG8u9A0F4DWgVv5mgFpEaSzjmpA5sJBZMF8Td8k" +
+            "52VbJCrfU9UF5BfjTQri9wzQhXcPPmtpMEj4u6PrMt6RuOZiJ0epOTMpRZ7KDocqqfnhAgMBAAEC" +
+            "gYEAhGMmm5hxBqZFhBjs2DP+plaBk2JyttkfWYqy6PvuPSjqbrBcT8uqNia5Fb+cUowbIjT7cfSD" +
+            "fYMxi1woAHntq6mnDohR0o6+QwDTpEHIFemjkjRA5ktR7Bljlpvy3rZluJ1TUuC9OqZ+ccM8Rqk+" +
+            "6ng2Cpy6TAoORv8ZMOJked0CQQDRu1wTRLRiIPRGROVm4RCpSZR7DneOi67Pin5aU7TBFG0BruQF" +
+            "+3mXxHWIsAPJUa8YvxGv+eHd+14O+17zC1pvAkEAwokF25T6Ig4y6XAB1ohY6NQhtFN17Xiui8Fh" +
+            "+58h0zNKYN7h/ZIGr7HNyFpurKHUU5XqVbaWo++DUQl6ur9YrwJAJzCRVfBinGt3+aFqFD099cQQ" +
+            "AKaFZJdpRNKmJY66mdGNROE/Lnb9E4TcSXxKWNXwl/kr/uv8bpRH0RjbdyLJ9QJALnvndmzGyFR0" +
+            "PeuRxN2XwSrPUvOOfkwUCTkQXLvNrVXYNAWOIrU9+8WU0ocpYv7YaZCtCgYzQMD+s+J7/Ruz6QJA" +
+            "NEXp3m3T5nlyXjkJZacLpwDrvqsHoI3RCNdOWUqoH5BdTkQJRn92d4yPMtUxMqqGCgaka4HaZVxp" +
+            "HKcdXwy/TA==";
+    private static String pk =
+            "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChslLbbeXAwgWgLCHgW52M/fHKsvwq1RrxZAR5" +
+            "hUstiGTbVobTZQt+TikyySIlZSq51fCwZCck0kaAKYOsqEEshCbpLI/eculRHEA+xLpw+SmhEObV" +
+            "oIsWZUDP6cfl88Wrgt9Hpx/0JR6BFKP1DVcRKpJjbWagpQIscpL4iCh3dwIDAQAB";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,22 +79,27 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setListener();
 //        showDialog();
 //        httpTest(url);
-        //文件上传
-//        new Thread() {
-//            @Override
-//            public void run() {
-//                UploadFile uploadFile = new UploadFile();
-//                try {
-//                    uploadFile.UploadFile(url, "hello,world!", null);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }.start();
+//        文件上传
+        new Thread() {
+            @Override
+            public void run() {
+                UploadFile uploadFile = new UploadFile();
+                try {
+                    uploadFile.UploadFile(url, "hello,world!", null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+
+//        String pk = RSAUtil.createPublicStr();
+//        String sk = RSAUtil.createPrivateStr();
+//        Log.d("TAG", "pk=" + pk);
+//        Log.d("TAG", "sk=" + sk);
 
 //        encryptTest();
-        String aesStr = LYJAESUtil.createAESKey();
-        Log.d("AES", aesStr);
+//        String aesStr = LYJAESUtil.createAESKey();
+//        Log.d("AES", aesStr);
 
 
     }
