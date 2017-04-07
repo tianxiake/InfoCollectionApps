@@ -127,7 +127,7 @@ public class RSAUtil {
             Cipher cipher = Cipher.getInstance("RSA");
 //            Cipher cipher = Cipher.getInstance(KEY_CIPHER);
             //Cipher cipher = Cipher.getInstance("RSA");
-            cipher.init(cipher.DECRYPT_MODE, key);
+            cipher.init(Cipher.DECRYPT_MODE, key);
             int blockSize = cipher.getBlockSize();
             ByteArrayOutputStream bout = new ByteArrayOutputStream(64);
             int j = 0;

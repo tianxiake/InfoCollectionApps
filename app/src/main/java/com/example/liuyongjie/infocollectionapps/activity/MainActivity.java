@@ -15,23 +15,19 @@ import com.example.liuyongjie.infocollectionapps.R;
 import com.example.liuyongjie.infocollectionapps.center.DataCenter;
 import com.example.liuyongjie.infocollectionapps.util.FileUtil;
 import com.example.liuyongjie.infocollectionapps.util.HttpUtil;
-import com.example.liuyongjie.infocollectionapps.util.RSAUtil;
 import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
 import com.example.liuyongjie.infocollectionapps.util.ToastUtil;
-import com.example.liuyongjie.infocollectionapps.util.UploadFile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 
 import static com.example.liuyongjie.infocollectionapps.util.FileUtil.readFile2String;
-import static com.example.liuyongjie.infocollectionapps.util.FileUtil.writeFileFromIS;
 import static com.example.liuyongjie.infocollectionapps.util.FileUtil.writeFileFromString;
 import static com.example.liuyongjie.infocollectionapps.util.ZipUtil.zipFile;
 
@@ -39,7 +35,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Button sensorButton;
     private Button postButton;
     private static String url = "http://10.0.1.166:4949/test";
-    private static String getUrl = "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=0&rsv_idx=1&tn=baidu&wd=%E4%B8%AD%E5%9B%BD&rsv_pq=9379c7840002326c&rsv_t=4ae72Sk1opqSg2XqdMYD8i1HGq7GPLVaerK27pjVBehhnYlUSy9b%2FLo%2BlrY&rqlang=cn&rsv_enter=1&rsv_sug3=3&rsv_sug2=0&inputT=1063&rsv_sug4=1558";
+    //    private static String getUrl = "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=0&rsv_idx=1&tn=baidu&wd=%E4%B8%AD%E5%9B%BD&rsv_pq=9379c7840002326c&rsv_t=4ae72Sk1opqSg2XqdMYD8i1HGq7GPLVaerK27pjVBehhnYlUSy9b%2FLo%2BlrY&rqlang=cn&rsv_enter=1&rsv_sug3=3&rsv_sug2=0&inputT=1063&rsv_sug4=1558";
     public static String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALgG+1YD01hDZeuw8Cw80gjNNLC9" +
             "6EH7tROKFEhO87GNJgNUxzXQ3VnL+TyVly4yJ3vQ7lUbkpnc7e8JLQgiqneouL+MEFXBXWObdmXz" +
             "t+E4TpTnjQHTqiBfIR3CcsvIK9OsWIrkSzILOOcTrpf04nX6HGn4EIVBvGUwFh24FKW3AgMBAAEC" +
@@ -63,19 +59,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
         initView();
         setListener();
 //        showDialog();
-        httpTest(url);
+//        httpTest(url);
         //文件上传
-        new Thread() {
-            @Override
-            public void run() {
-                UploadFile uploadFile = new UploadFile();
-                try {
-                    uploadFile.UploadFile(getUrl, "hello,world!", null);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                UploadFile uploadFile = new UploadFile();
+//                try {
+//                    uploadFile.UploadFile(url, "hello,world!", null);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }.start();
+
+        encryptTest();
+
+
     }
 
     public void showDialog() {
@@ -100,6 +100,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
 
     }
+
+//    //获得栈的信息
+//    public void get() {
+//        Runtime runtime = Runtime.getRuntime();
+//        try {
+//            Process process = runtime.exec("dumpsys");
+//            InputStream inputStream = process.getInputStream();
+//            boolean success = FileUtil.writeFileFromIS(new File("/sdcard/Android/dumpsys.txt"), inputStream, false);
+//            if (success) {
+//                ToastUtil.show(this, "写入文件成功", Toast.LENGTH_LONG);
+//            }
+//        } catch (IOException e) {
+//            Log.d("TAG", e.toString());
+//        }
+//
+//    }
 
     private void initView() {
         sensorButton = (Button) findViewById(R.id.sensor_button);
@@ -322,22 +338,34 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        boolean writeFile = FileUtil.writeFileFromIS(new File("/sdcard/Android/decryptByte.txt"), new ByteArrayInputStream(decryptByte), false);
 //        if (writeFile) {
 //            ToastUtil.show(this, "写入文件成功", Toast.LENGTH_LONG);
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    byte[] encryptByte = FileUtil.readFile2Bytes("/sdcard/Android/encryptByte.txt");
-                    byte[] decryptByte = RSAUtil.decrypt(RSAUtil.getPrivateKey(privateKey), encryptByte);
-                    Log.d("TAG", decryptByte + "");
-                    if (decryptByte != null) {
-                        boolean write = writeFileFromIS(new File("/sdcard/Android/decryptByte.txt"), new ByteArrayInputStream(decryptByte), false);
-                        Log.d("TAG", "write=" + write);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    long startTime = System.currentTimeMillis();
+//                    byte[] encryptByte = FileUtil.readFile2Bytes("/sdcard/Android/encryptByte.txt");
+//                    byte[] decryptByte = RSAUtil.decrypt(RSAUtil.getPrivateKey(privateKey), encryptByte);
+//                    Log.d("TAG", "解码时间=" + (System.currentTimeMillis() - startTime));
+//                    Log.d("TAG", decryptByte + "");
+//                    if (decryptByte != null) {
+//                        boolean write = writeFileFromIS(new File("/sdcard/Android/decryptByte.dat"), new ByteArrayInputStream(decryptByte), false);
+//                        Log.d("TAG", "write=" + write);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }.start();
+
+//        new Thread() {
+//            @Override
+//            public void run() {
+////                super.run();
+//                byte[] encryptByte = FileUtil.readFile2Bytes("/sdcard/Android/encryptByte.txt");
+////                FileUtil.writeFileFromIS()
+//                FileUtil.writeFileFromIS()
+//            }
+//        }.start();
 
     }
 }

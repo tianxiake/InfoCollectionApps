@@ -1,1 +1,1 @@
-include ':app', ':obtainokhttp'
+include ':app'
