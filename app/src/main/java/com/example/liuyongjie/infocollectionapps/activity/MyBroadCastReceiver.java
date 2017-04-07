@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.util.Log;
 
 import com.example.liuyongjie.infocollectionapps.center.DataCenter;
 import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
@@ -40,6 +41,13 @@ public class MyBroadCastReceiver extends BroadcastReceiver {
                     //发送文件到服务器,并且删掉文件
                 }
             }
+        }
+
+        if (action.equals(WifiManager.RSSI_CHANGED_ACTION)) {
+            int rssi = intent.getIntExtra(WifiManager.EXTRA_NEW_RSSI, 0);
+            int length = WifiManager.calculateSignalLevel(rssi, 100);
+            Log.d("TAG", "rssi=" + rssi + "length=" + length);
+
         }
 
     }

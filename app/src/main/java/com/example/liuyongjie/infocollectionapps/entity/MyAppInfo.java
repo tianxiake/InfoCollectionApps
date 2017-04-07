@@ -8,6 +8,9 @@ package com.example.liuyongjie.infocollectionapps.entity;
 public class MyAppInfo {
     private String packageName;
 
+    public MyAppInfo() {
+    }
+
     public MyAppInfo(String packageName) {
         this.packageName = packageName;
     }
