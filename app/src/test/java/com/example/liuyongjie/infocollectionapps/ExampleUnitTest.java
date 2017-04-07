@@ -1,13 +1,6 @@
 package com.example.liuyongjie.infocollectionapps;
 
-import android.util.Log;
-
-import com.example.liuyongjie.infocollectionapps.util.RSAUtil;
-
 import org.junit.Test;
-
-import java.io.UnsupportedEncodingException;
-import java.security.KeyPair;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

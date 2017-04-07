@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.liuyongjie.infocollectionapps.R;
 import com.example.liuyongjie.infocollectionapps.center.DataCenter;
+import com.example.liuyongjie.infocollectionapps.util.LYJAESUtil;
 import com.example.liuyongjie.infocollectionapps.util.FileUtil;
 import com.example.liuyongjie.infocollectionapps.util.HttpUtil;
 import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
@@ -73,7 +74,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //            }
 //        }.start();
 
-        encryptTest();
+//        encryptTest();
+        String aesStr = LYJAESUtil.createAESKey();
+        Log.d("AES", aesStr);
 
 
     }
@@ -297,10 +300,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //            boolean zipSuccess = ZipUtil.zipFile(new File(FilePathConstants.SENSOR_PATH), new File(FilePathConstants.ZIP_SENSOR_PATH), null);
 //            if (zipSuccess) {
 //                //对文件进行加密
-////                RSAUtil.encrypt()
+////                LYJRSAUtil.encrypt()
 ////                File file = new File(FilePathConstants.ZIP_SENSOR_PATH);
 //                byte[] bytes = FileUtil.readFile2String(new File(FilePathConstants.ZIP_SENSOR_PATH), "utf-8").getBytes();
-////                byte[] RSAUtil.encrypt(RSAUtil.getPublicKey(""),bytes);
+////                byte[] LYJRSAUtil.encrypt(LYJRSAUtil.getPublicKey(""),bytes);
 //                httpUtil.httpPostFile(url, new File(FilePathConstants.ZIP_SENSOR_PATH));
 //            }
             httpUtil.httpPostFile(url, null);
@@ -317,7 +320,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //            FileUtil.writeFileFromString("/sdcard/Android/sdcard.txt", string, true);
 //        }
 //        byte[] strBytes = FileUtil.readFile2String(new File("/sdcard/Android/sdcard.txt"), "utf-8").getBytes();
-//        byte[] encryptByte = RSAUtil.encrypt(RSAUtil.getPublicKey(publicKey), strBytes);
+//        byte[] encryptByte = LYJRSAUtil.encrypt(LYJRSAUtil.getPublicKey(publicKey), strBytes);
 ////        ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
 //        boolean success = writeFileFromIS(new File("/sdcard/Android/encryptByte.txt"), new ByteArrayInputStream(encryptByte), false);
 //        if (success) {
@@ -325,7 +328,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        }
 //        byte[] bytes = FileUtil.readFile2String(new File("/sdcard/Android/encryptByte.txt"), "utf-8").getBytes();
 //        Log.d("TAG", bytes.length + "");
-//        byte[] decryptByte = RSAUtil.decrypt(RSAUtil.getPrivateKey(privateKey), bytes);
+//        byte[] decryptByte = LYJRSAUtil.decrypt(LYJRSAUtil.getPrivateKey(privateKey), bytes);
 //        try {
 //            String str = new String(decryptByte, "utf-8");
 //            boolean writeFile = FileUtil.writeFileFromString("/sdcard/Android/decryptByte.txt", str, false);
@@ -344,7 +347,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //                try {
 //                    long startTime = System.currentTimeMillis();
 //                    byte[] encryptByte = FileUtil.readFile2Bytes("/sdcard/Android/encryptByte.txt");
-//                    byte[] decryptByte = RSAUtil.decrypt(RSAUtil.getPrivateKey(privateKey), encryptByte);
+//                    byte[] decryptByte = LYJRSAUtil.decrypt(LYJRSAUtil.getPrivateKey(privateKey), encryptByte);
 //                    Log.d("TAG", "解码时间=" + (System.currentTimeMillis() - startTime));
 //                    Log.d("TAG", decryptByte + "");
 //                    if (decryptByte != null) {
