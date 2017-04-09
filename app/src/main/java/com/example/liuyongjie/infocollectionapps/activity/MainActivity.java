@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,11 +14,12 @@ import android.widget.Toast;
 
 import com.example.liuyongjie.infocollectionapps.R;
 import com.example.liuyongjie.infocollectionapps.center.DataCenter;
-import com.example.liuyongjie.infocollectionapps.util.LYJAESUtil;
 import com.example.liuyongjie.infocollectionapps.util.FileUtil;
 import com.example.liuyongjie.infocollectionapps.util.HttpUtil;
+import com.example.liuyongjie.infocollectionapps.util.RSAUtil;
 import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
 import com.example.liuyongjie.infocollectionapps.util.ToastUtil;
+import com.example.liuyongjie.infocollectionapps.util.UploadFile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,8 +77,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        }.start();
 
 //        encryptTest();
-        String aesStr = LYJAESUtil.createAESKey();
-        Log.d("AES", aesStr);
+//        String aesStr = LYJAESUtil.createAESKey();
+//        Log.d("AES", aesStr);
+//        String resPub =
+//        String aesStr = AESUtil.createAESKey();
+//        String rsaPub = RSAUtil.createPublicStr();
+//        String rsaPri = RSAUtil.createPrivateStr();
+//        Log.d("TAG","aesStr="+aesStr);
+//        Log.d("TAG","rsaPub="+rsaPub);
+//        Log.d("TAG","rsaPri="+rsaPri);
+        try {
+            byte[] aesKey = RSAUtil.encryptByPublicKey(UploadFile.aesKey.getBytes(), UploadFile.rsaPub);
+//            byte[] aesKey = LYJRSAUtil.encrypt(LYJRSAUtil.getPrivateKey(privateKey), UploadFile.aesKey.getBytes());
+            String aesKeyStr = new String(Base64.encode(aesKey, Base64.DEFAULT));
+            Log.d("TAG", "aesKeyStr=" + aesKeyStr);
+
+//            byte[] decryptByte = LYJRSAUtil.decrypt(LYJRSAUtil.getPublicKey(publicKey),Base64.decode(aesKeyStr.getBytes(),Base64.DEFAULT));
+            byte[] decryptByte = RSAUtil.decrypt(UploadFile.rsaPri,Base64.decode(aesKeyStr,Base64.DEFAULT));
+            String rsaStr = new String(Base64.decode(decryptByte, Base64.DEFAULT));
+            Log.d("TAG", "aesKeyStr=" + rsaStr);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
     }
