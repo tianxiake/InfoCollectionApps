@@ -12,8 +12,10 @@ import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
@@ -22,6 +24,7 @@ import javax.crypto.Cipher;
  * xuliang
  */
 public class RSAUtil {
+
     public static final String SIGN_ALGORITHMS = "SHA1WithRSA";
     private static final String KEY_FACTORY = "RSA";
     private static final String KEY_CIPHER = "RSA/ECB/PKCS1Padding";
@@ -177,6 +180,58 @@ public class RSAUtil {
             byte[] encodeByte = createKeyPair().getPrivate().getEncoded();
             return new String(Base64.encode(encodeByte, Base64.DEFAULT));
         } catch (NoSuchAlgorithmException e) {
+            log.error(Author.liuyongjie, e);
+        }
+        return null;
+    }
+
+
+    /**
+     * 解密
+     *
+     * @param key 解密的密钥
+     * @param raw 已经加密的数据
+     * @return 解密后的明文
+     */
+    public static byte[] decrypt(String key, byte[] raw) {
+        try {
+            Cipher cipher = Cipher.getInstance("RSA");
+//            Cipher cipher = Cipher.getInstance(KEY_CIPHER);
+            //Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.DECRYPT_MODE, getPrivateKey(key));
+            int blockSize = cipher.getBlockSize();
+            ByteArrayOutputStream bout = new ByteArrayOutputStream(64);
+            int j = 0;
+            while (raw.length - j * blockSize > 0) {
+                bout.write(cipher.doFinal(raw, j * blockSize, blockSize));
+                j++;
+            }
+            return bout.toByteArray();
+        } catch (Exception e) {
+            log.error(Author.liuyongjie, e);
+        }
+        return null;
+    }
+
+
+    /**
+     * 返回一个私钥对象
+     *
+     * @param key RSA私钥字符串
+     * @return f返回一个PrivateKey对象
+     */
+    public static PrivateKey getPrivateKey(String key) {
+        byte[] keyBytes;
+        try {
+            keyBytes = Base64.decode(key, Base64.DEFAULT);
+//            keyBytes = org.bouncycastle.util.encoders.Base64.decode(key);
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+            return privateKey;
+        } catch (NoSuchAlgorithmException e) {
+            log.error(Author.liuyongjie, e);
+        } catch (InvalidKeySpecException e) {
             log.error(Author.liuyongjie, e);
         }
         return null;

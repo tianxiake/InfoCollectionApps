@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import com.example.liuyongjie.infocollectionapps.R;
 import com.example.liuyongjie.infocollectionapps.center.DataCenter;
 import com.example.liuyongjie.infocollectionapps.util.FileUtil;
 import com.example.liuyongjie.infocollectionapps.util.HttpUtil;
+import com.example.liuyongjie.infocollectionapps.util.RSAUtil;
 import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
 import com.example.liuyongjie.infocollectionapps.util.ToastUtil;
 import com.example.liuyongjie.infocollectionapps.util.UploadFile;
@@ -98,8 +100,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        Log.d("TAG", "sk=" + sk);
 
 //        encryptTest();
-//        String aesStr = LYJAESUtil.createAESKey();
-//        Log.d("AES", aesStr);
+        String aesStr = LYJAESUtil.createAESKey();
+        Log.d("AES", aesStr);
 
 
     }
