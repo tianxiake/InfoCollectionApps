@@ -75,19 +75,12 @@ public class UploadFile {
 
         long time = System.currentTimeMillis();
         String token = HttpUtil.string2MD5(key + time + app);
-        //生成Base64 编码AES公钥
-//        byte[] data = "12345678".getBytes("UTF-8");
-//        String AESKey =
-//        String iv = StringUtils.randomString(16);
+        //随机生成16位AES公钥
         String aesRawStr = StringUtils.randomString(16);//生成AESKey utf-8
-//        Log.d("Http", "aesKey=" + aesRawStr);
         //加密后字节数组 utf-8编码
-//        byte[] encodeByte = RSAUtil.encryptByPublicKey(Base64.decode(aesRawStr, Base64.DEFAULT), MainActivity.pk);
         byte[] encodeByte = RSAUtil.encryptByPublicKey(aesRawStr.getBytes(), MainActivity.pk);
         //加密后的字符串密钥 Base64编码
         String aesEncodeStr = new String(Base64.encode(encodeByte, Base64.DEFAULT));
-//        String aesEncodeStr = new String(encodeByte);
-//        log.info(Author.liuyongjie, Business.dev_test, "获取AES钥匙", "aesRawStr={},aesEncodeStr={}", aesRawStr, aesEncodeStr);
         Log.d("Http", "AESKey明文=" + aesRawStr + ",RSA加密AESKey后字符串=" + aesEncodeStr);
         //获取HttpURLConnection对象,并设置配置
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -98,23 +91,21 @@ public class UploadFile {
 
         //----设置请求header----
         conn.setRequestProperty("Charset", "utf-8");
-//        conn.setRequestProperty("Content-type", "application/octet-stream");
         conn.setRequestProperty("v_app", app);
         conn.setRequestProperty("v_time", time + "");
         conn.setRequestProperty("v_token", token);
         //RSA加密AES Key ,key的值编码方式是Base64
-//        Log.d("Http", "原始key=" + aesEncodeStr);
         aesEncodeStr = URLEncoder.encode(aesEncodeStr, "utf-8");
         conn.setRequestProperty("v_key", aesEncodeStr);
         Log.d("Http", "URL Encode aesEncodeStr=" + aesEncodeStr);
         conn.setDoInput(true);
         conn.setDoOutput(true);
         conn.setUseCaches(false);
-//        FileUtil.writeFileFromString("/sdcard/Android/Key/aesKey", aesRawStr, false);
-//        byte[] contentByte = LAESUtil.encrypt(fileName.getBytes(), aesRawStr, "hell");
 
         //AES加密传输内容
         byte[] content = AESUtil.encrypt(fileName.getBytes("utf-8"), aesRawStr, iv);
+
+        //解密测试区
         Log.d("Http", "content length=" + content.length);
         String a = Base64.encodeToString(content, Base64.DEFAULT);
         Log.d("Http", "a=" + a);

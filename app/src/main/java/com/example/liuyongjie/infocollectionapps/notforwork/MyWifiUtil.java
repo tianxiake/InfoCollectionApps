@@ -2,21 +2,18 @@ package com.example.liuyongjie.infocollectionapps.notforwork;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 
-import com.example.liuyongjie.infocollectionapps.entity.MyWifiInfo;
 import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
 import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
 import com.example.liuyongjie.infocollectionapps.log.util.Author;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,17 +41,6 @@ public class MyWifiUtil {
                 .getSystemService(Context.WIFI_SERVICE);
         // 取得WifiInfo对象
         mWifiInfo = mWifiManager.getConnectionInfo();
-    }
-
-    //获取当前手机wifi列表。6.0系统需要用户开启定位才能拿到wifi列表
-    public List<MyWifiInfo> getNearbyWifiList() {
-        List<ScanResult> results = mWifiManager.getScanResults();
-        List<MyWifiInfo> infos = new ArrayList<>();
-        for (ScanResult result : results) {
-            MyWifiInfo info = new MyWifiInfo(result.SSID, result.BSSID, result.level);
-            infos.add(info);
-        }
-        return infos;
     }
 
     //返回客户端的状态信息,返回值是一个枚举值,

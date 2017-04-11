@@ -40,22 +40,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Button sensorButton;
     private Button postButton;
     private static String url = "http://10.0.1.166:4949/test";
-    //    private static String getUrl = "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=0&rsv_idx=1&tn=baidu&wd=%E4%B8%AD%E5%9B%BD&rsv_pq=9379c7840002326c&rsv_t=4ae72Sk1opqSg2XqdMYD8i1HGq7GPLVaerK27pjVBehhnYlUSy9b%2FLo%2BlrY&rqlang=cn&rsv_enter=1&rsv_sug3=3&rsv_sug2=0&inputT=1063&rsv_sug4=1558";
-//    public static String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALgG+1YD01hDZeuw8Cw80gjNNLC9" +
-//            "6EH7tROKFEhO87GNJgNUxzXQ3VnL+TyVly4yJ3vQ7lUbkpnc7e8JLQgiqneouL+MEFXBXWObdmXz" +
-//            "t+E4TpTnjQHTqiBfIR3CcsvIK9OsWIrkSzILOOcTrpf04nX6HGn4EIVBvGUwFh24FKW3AgMBAAEC" +
-//            "gYAcYhdJwPVL27lQjM2+RPMwIFZMHD5CTwwyo01VibfUXqzKPr0q87fwLaGXUosquNmWIzdfMQ1/" +
-//            "Za/c+lFTu+UGpKSo/TFVP2UvSChtrYR7kaFuYLwYCa8lpCzQ54u+nWjytQTyQxS6BkdZxtsL5xWK" +
-//            "0Qs9Oc7JUpkbTEfFhHqSwQJBAOC5pn2zvufdEYbjUn2l06KA7WdmzPHC7im6xyI1xJ/PF/GXEK0V" +
-//            "V2fBoPfLbJmNBvFXUfns61tUfyNDFJVYhU8CQQDRo1/sXYpe3Ak1Gd4gAdENUafZ1/qWJZ4d1aVu" +
-//            "yOBt+HABEiKV2w5UaZieC2tUAMuP9hF7jjJuf9wwNCR7YA8ZAkBmdv/c7Oos2nW1ZU0lkUjQHa0h" +
-//            "qpPj4Ber20gU5yNCIrEuLM0jvkleO8FjetOHp+/0dvYf2NDvkbVupJVsCzKtAkEAwgjYeRsfPquk" +
-//            "rgySRsfHqe9BT+WTH7QTxIOByqeM6tx/Ns6FSnTlr4XJZ8ckAS13PHlCNz0nOpWHxOoONk9zyQJA" +
-//            "cehKjJm94jIuzoP7czxezfwTtncbYOoIausOs2gNQfYbtDaIQDWFULtbD/YvDjToIlSJoQNKOfns" +
-//            "2YgQOzICVw==";
-//    public static String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4BvtWA9NYQ2XrsPAsPNIIzTSwvehB+7UTihRI" +
-//            "TvOxjSYDVMc10N1Zy/k8lZcuMid70O5VG5KZ3O3vCS0IIqp3qLi/jBBVwV1jm3Zl87fhOE6U540B" +
-//            "06ogXyEdwnLLyCvTrFiK5EsyCzjnE66X9OJ1+hxp+BCFQbxlMBYduBSltwIDAQAB";
 
     public static String sk =
             "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAMtJYs4ffxjHiIEm8UEv+huLgXtO" +
@@ -87,7 +71,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        DataCenter center = new DataCenter();
 //        JSONObject wifiJson = center.getWifiJsonObject(this);
 //        FileUtil.writeFileFromString("/sdcard/Android/wifiAll", wifiJson.toString(), false);
-
 
 
     }

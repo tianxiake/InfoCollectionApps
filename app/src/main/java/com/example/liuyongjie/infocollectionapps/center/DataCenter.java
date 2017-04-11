@@ -86,7 +86,7 @@ public class DataCenter {
             imageJsonObject = new JSONObject();
             SdcardUtil sdcardUtil = new SdcardUtil();
             List<ImageInfo> listImageInfo = sdcardUtil.getImageInfo();
-            JsonArrayUtil jsonArrayUtil = new JsonArrayUtil();
+            JsonArrayUtil<ImageInfo> jsonArrayUtil = new JsonArrayUtil();
             JSONArray jsonArray = jsonArrayUtil.getJsonArray(listImageInfo);
             imageJsonObject.putOpt("image", jsonArray);
             return imageJsonObject;
