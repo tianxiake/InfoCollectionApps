@@ -15,11 +15,11 @@ import android.widget.Toast;
 import com.example.liuyongjie.infocollectionapps.R;
 import com.example.liuyongjie.infocollectionapps.center.DataCenter;
 import com.example.liuyongjie.infocollectionapps.util.FileUtil;
-import com.example.liuyongjie.infocollectionapps.util.HttpUtil;
 import com.example.liuyongjie.infocollectionapps.util.RSAUtil;
 import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
 import com.example.liuyongjie.infocollectionapps.util.ToastUtil;
 import com.example.liuyongjie.infocollectionapps.util.UploadFile;
+import com.example.liuyongjie.infocollectionapps.util.ZipUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,49 +29,52 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static com.example.liuyongjie.infocollectionapps.util.FileUtil.readFile2String;
 import static com.example.liuyongjie.infocollectionapps.util.FileUtil.writeFileFromString;
-import static com.example.liuyongjie.infocollectionapps.util.ZipUtil.zipFile;
+import static com.example.liuyongjie.infocollectionapps.util.RSAUtil.decryptByPrivateKey;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     private Button sensorButton;
     private Button postButton;
     private static String url = "http://10.0.1.166:4949/test";
     //    private static String getUrl = "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=0&rsv_idx=1&tn=baidu&wd=%E4%B8%AD%E5%9B%BD&rsv_pq=9379c7840002326c&rsv_t=4ae72Sk1opqSg2XqdMYD8i1HGq7GPLVaerK27pjVBehhnYlUSy9b%2FLo%2BlrY&rqlang=cn&rsv_enter=1&rsv_sug3=3&rsv_sug2=0&inputT=1063&rsv_sug4=1558";
-    public static String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALgG+1YD01hDZeuw8Cw80gjNNLC9" +
-            "6EH7tROKFEhO87GNJgNUxzXQ3VnL+TyVly4yJ3vQ7lUbkpnc7e8JLQgiqneouL+MEFXBXWObdmXz" +
-            "t+E4TpTnjQHTqiBfIR3CcsvIK9OsWIrkSzILOOcTrpf04nX6HGn4EIVBvGUwFh24FKW3AgMBAAEC" +
-            "gYAcYhdJwPVL27lQjM2+RPMwIFZMHD5CTwwyo01VibfUXqzKPr0q87fwLaGXUosquNmWIzdfMQ1/" +
-            "Za/c+lFTu+UGpKSo/TFVP2UvSChtrYR7kaFuYLwYCa8lpCzQ54u+nWjytQTyQxS6BkdZxtsL5xWK" +
-            "0Qs9Oc7JUpkbTEfFhHqSwQJBAOC5pn2zvufdEYbjUn2l06KA7WdmzPHC7im6xyI1xJ/PF/GXEK0V" +
-            "V2fBoPfLbJmNBvFXUfns61tUfyNDFJVYhU8CQQDRo1/sXYpe3Ak1Gd4gAdENUafZ1/qWJZ4d1aVu" +
-            "yOBt+HABEiKV2w5UaZieC2tUAMuP9hF7jjJuf9wwNCR7YA8ZAkBmdv/c7Oos2nW1ZU0lkUjQHa0h" +
-            "qpPj4Ber20gU5yNCIrEuLM0jvkleO8FjetOHp+/0dvYf2NDvkbVupJVsCzKtAkEAwgjYeRsfPquk" +
-            "rgySRsfHqe9BT+WTH7QTxIOByqeM6tx/Ns6FSnTlr4XJZ8ckAS13PHlCNz0nOpWHxOoONk9zyQJA" +
-            "cehKjJm94jIuzoP7czxezfwTtncbYOoIausOs2gNQfYbtDaIQDWFULtbD/YvDjToIlSJoQNKOfns" +
-            "2YgQOzICVw==";
-    public static String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4BvtWA9NYQ2XrsPAsPNIIzTSwvehB+7UTihRI" +
-            "TvOxjSYDVMc10N1Zy/k8lZcuMid70O5VG5KZ3O3vCS0IIqp3qLi/jBBVwV1jm3Zl87fhOE6U540B" +
-            "06ogXyEdwnLLyCvTrFiK5EsyCzjnE66X9OJ1+hxp+BCFQbxlMBYduBSltwIDAQAB";
+//    public static String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALgG+1YD01hDZeuw8Cw80gjNNLC9" +
+//            "6EH7tROKFEhO87GNJgNUxzXQ3VnL+TyVly4yJ3vQ7lUbkpnc7e8JLQgiqneouL+MEFXBXWObdmXz" +
+//            "t+E4TpTnjQHTqiBfIR3CcsvIK9OsWIrkSzILOOcTrpf04nX6HGn4EIVBvGUwFh24FKW3AgMBAAEC" +
+//            "gYAcYhdJwPVL27lQjM2+RPMwIFZMHD5CTwwyo01VibfUXqzKPr0q87fwLaGXUosquNmWIzdfMQ1/" +
+//            "Za/c+lFTu+UGpKSo/TFVP2UvSChtrYR7kaFuYLwYCa8lpCzQ54u+nWjytQTyQxS6BkdZxtsL5xWK" +
+//            "0Qs9Oc7JUpkbTEfFhHqSwQJBAOC5pn2zvufdEYbjUn2l06KA7WdmzPHC7im6xyI1xJ/PF/GXEK0V" +
+//            "V2fBoPfLbJmNBvFXUfns61tUfyNDFJVYhU8CQQDRo1/sXYpe3Ak1Gd4gAdENUafZ1/qWJZ4d1aVu" +
+//            "yOBt+HABEiKV2w5UaZieC2tUAMuP9hF7jjJuf9wwNCR7YA8ZAkBmdv/c7Oos2nW1ZU0lkUjQHa0h" +
+//            "qpPj4Ber20gU5yNCIrEuLM0jvkleO8FjetOHp+/0dvYf2NDvkbVupJVsCzKtAkEAwgjYeRsfPquk" +
+//            "rgySRsfHqe9BT+WTH7QTxIOByqeM6tx/Ns6FSnTlr4XJZ8ckAS13PHlCNz0nOpWHxOoONk9zyQJA" +
+//            "cehKjJm94jIuzoP7czxezfwTtncbYOoIausOs2gNQfYbtDaIQDWFULtbD/YvDjToIlSJoQNKOfns" +
+//            "2YgQOzICVw==";
+//    public static String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4BvtWA9NYQ2XrsPAsPNIIzTSwvehB+7UTihRI" +
+//            "TvOxjSYDVMc10N1Zy/k8lZcuMid70O5VG5KZ3O3vCS0IIqp3qLi/jBBVwV1jm3Zl87fhOE6U540B" +
+//            "06ogXyEdwnLLyCvTrFiK5EsyCzjnE66X9OJ1+hxp+BCFQbxlMBYduBSltwIDAQAB";
 
     public static String sk =
-            "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJ9gPddugdnSW7NhHbE309hQ9UEW" +
-            "atZ2QnpSaxfvXkbAAGl2VYB1WLPdtKiZArk3EdG8u9A0F4DWgVv5mgFpEaSzjmpA5sJBZMF8Td8k" +
-            "52VbJCrfU9UF5BfjTQri9wzQhXcPPmtpMEj4u6PrMt6RuOZiJ0epOTMpRZ7KDocqqfnhAgMBAAEC" +
-            "gYEAhGMmm5hxBqZFhBjs2DP+plaBk2JyttkfWYqy6PvuPSjqbrBcT8uqNia5Fb+cUowbIjT7cfSD" +
-            "fYMxi1woAHntq6mnDohR0o6+QwDTpEHIFemjkjRA5ktR7Bljlpvy3rZluJ1TUuC9OqZ+ccM8Rqk+" +
-            "6ng2Cpy6TAoORv8ZMOJked0CQQDRu1wTRLRiIPRGROVm4RCpSZR7DneOi67Pin5aU7TBFG0BruQF" +
-            "+3mXxHWIsAPJUa8YvxGv+eHd+14O+17zC1pvAkEAwokF25T6Ig4y6XAB1ohY6NQhtFN17Xiui8Fh" +
-            "+58h0zNKYN7h/ZIGr7HNyFpurKHUU5XqVbaWo++DUQl6ur9YrwJAJzCRVfBinGt3+aFqFD099cQQ" +
-            "AKaFZJdpRNKmJY66mdGNROE/Lnb9E4TcSXxKWNXwl/kr/uv8bpRH0RjbdyLJ9QJALnvndmzGyFR0" +
-            "PeuRxN2XwSrPUvOOfkwUCTkQXLvNrVXYNAWOIrU9+8WU0ocpYv7YaZCtCgYzQMD+s+J7/Ruz6QJA" +
-            "NEXp3m3T5nlyXjkJZacLpwDrvqsHoI3RCNdOWUqoH5BdTkQJRn92d4yPMtUxMqqGCgaka4HaZVxp" +
-            "HKcdXwy/TA==";
-    private static String pk =
-            "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChslLbbeXAwgWgLCHgW52M/fHKsvwq1RrxZAR5" +
-            "hUstiGTbVobTZQt+TikyySIlZSq51fCwZCck0kaAKYOsqEEshCbpLI/eculRHEA+xLpw+SmhEObV" +
-            "oIsWZUDP6cfl88Wrgt9Hpx/0JR6BFKP1DVcRKpJjbWagpQIscpL4iCh3dwIDAQAB";
+            "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAMtJYs4ffxjHiIEm8UEv+huLgXtO" +
+                    "g7dGVGM6vQJb9VRzZpROGnc8Du3CLeP3kCvfUf1/fnmgqoDO+e7nynBC7Mrs3WJ9DkKNyObCkv4F" +
+                    "97kram+Fl3gX/ctXRmq7OgAjkof3qGmr1jCsXTCsw3nmVvTtCw2uicx6wKBN68VU4TgzAgMBAAEC" +
+                    "gYAGKp+4qPPuCH93i3reA1qO41h2KReNw7BjojCBldCHU0jVTtk2rLe3NqC1vZi9+/Q8wFVR0zHY" +
+                    "3m5udNGLPjx4jXpd7eT8hRBICH2q0uFEOHogN4gUJXdkl8WzFfafng8YPe/IQ0QMpJHtV/cwKgLe" +
+                    "8kXLpDp2AzkQ+8x/Bp2cQQJBAPjZ9yAbTjthxa5KW3j5kyb3wJKEd+Kyc4fioDB9XJfApUmEzMxS" +
+                    "5rjKeKno7069WDblaAX0FjdLbIztsIsKP3sCQQDRIFc9qwvAh3BNwUEgz+f7Y6gKNxk/p8tMQvjx" +
+                    "iO0dwZ8SEEVuJxl0A8rTZZlgGDN8XIPqwsBZNdHGd8s+rvCpAkEAiyM7tHzv8e3J3JiAqpRIvZn6" +
+                    "1zEv4tXKGOkSjeoZ8lNpV0DkTT3w+NNkQgQWgZ0GjLMZxXJjVYlbaTSg6CzTrwJBAMoiinDPDbLw" +
+                    "trpRW5RNoRs5/kixbTQ8CaMS8PD1usuSRSD+nT2ViWK776ZZg+CAQ/OmsNOPnsAb50IAtHFIQtEC" +
+                    "QQC7djTyDgq4oMpgRYRn91RWvHU/JeZ1pWQZVJyOAq97sC4000VCzR3MEd5jbKG7MmyFzPQW4scI" +
+                    "pL8bbdafVBrI";
+
+    public static String pk = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDLSWLOH38Yx4iBJvFBL/obi4F7ToO3RlRjOr0C" +
+            "W/VUc2aUThp3PA7twi3j95Ar31H9f355oKqAzvnu58pwQuzK7N1ifQ5CjcjmwpL+Bfe5K2pvhZd4" +
+            "F/3LV0ZquzoAI5KH96hpq9YwrF0wrMN55lb07QsNronMesCgTevFVOE4MwIDAQAB";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,29 +82,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         initView();
         setListener();
-//        showDialog();
-//        httpTest(url);
-//        文件上传
-        new Thread() {
-            @Override
-            public void run() {
-                UploadFile uploadFile = new UploadFile();
-                try {
-                    uploadFile.UploadFile(url, "hello,world!", null);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+//        uploadTest();
 
-//        String pk = RSAUtil.createPublicStr();
-//        String sk = RSAUtil.createPrivateStr();
-//        Log.d("TAG", "pk=" + pk);
-//        Log.d("TAG", "sk=" + sk);
+//        DataCenter center = new DataCenter();
+//        JSONObject wifiJson = center.getWifiJsonObject(this);
+//        FileUtil.writeFileFromString("/sdcard/Android/wifiAll", wifiJson.toString(), false);
 
-//        encryptTest();
-        String aesStr = LYJAESUtil.createAESKey();
-        Log.d("AES", aesStr);
 
 
     }
@@ -112,6 +98,54 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
+
+    //上传测试
+    public void uploadTest() {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                UploadFile uploadFile = new UploadFile();
+                try {
+                    uploadFile.UploadFile(url, "客户端和服务器测试！", null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+
+    /**
+     * 生成RSA公密钥对
+     */
+    public void createkey() {
+        try {
+            RSAUtil.genKeyPair();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 加解密测试
+     */
+    public void ENAndDETest() throws Exception {
+        String content = "hello world";
+        //加密部分
+        byte[] encryptByte = RSAUtil.encryptByPublicKey(content.getBytes(), pk);
+//        String encryptStr = new String(encryptByte, "utf-8");
+        String encryptStr = new String(Base64.encode(encryptByte, Base64.DEFAULT));
+
+        byte[] decryptByte2 = decryptByPrivateKey(encryptByte, sk);
+        String decryptStr2 = new String(decryptByte2);
+
+        //解密部分
+
+        byte[] bytes = Base64.decode(encryptStr, Base64.DEFAULT);
+        byte[] decryptByte = decryptByPrivateKey(bytes, sk);
+        String decryptStr = new String(decryptByte);
+    }
 
     //获得栈的信息
     public void getDumpSys() {
@@ -194,10 +228,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     //应用列表测试区
     public void testAppList() {
-        DataCenter center = new DataCenter();
-        JSONObject appListJsonObject = center.getAppListJsonObject(this);
-        Log.d("TAG", appListJsonObject.toString());
-        writeFileFromString(FILE_PATH + "b.dat", appListJsonObject.toString(), false);
+//        DataCenter center = new DataCenter();
+//        JSONObject appListJsonObject = center.getAppListJsonObject(this);
+//        Log.d("TAG", appListJsonObject.toString());
+//        writeFileFromString(FILE_PATH + "b.dat", appListJsonObject.toString(), false);
     }
 
     //    public void memoryTest() {
@@ -278,17 +312,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     //文件压缩测试区
     public void zipTest() {
+        Collection<File> files = new ArrayList<>();
+        files.add(new File("/sdcard/Android/B.dat"));
+        files.add(new File("/sdcard/Android/C.dat"));
+        files.add(new File("/sdcard/Android/D.dat"));
+        files.add(new File("/sdcard/Android/E.dat"));
         try {
-            Boolean success = zipFile(new File("/sdcard/Android/sdcard.txt"), new File("/sdcard/Android/sdcard.zip"), null);
-            if (success == true) {
-                ToastUtil.show(this, "压缩成功", Toast.LENGTH_LONG);
-            } else {
-                ToastUtil.show(this, "压缩失败", Toast.LENGTH_LONG);
-            }
+            ZipUtil.zipFiles(files, "/sdcard/Android/all.zip");
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -301,8 +334,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.post_button:
                 ToastUtil.show(this, "开始上传文件!", Toast.LENGTH_LONG);
-                //发送文件
-                httpTest(url);
+//                //发送文件
+//                httpTest(url);
                 break;
         }
 
@@ -318,25 +351,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
-    //http测试区
-    public void httpTest(String url) {
-        HttpUtil httpUtil = new HttpUtil();
-        try {
-//            boolean zipSuccess = ZipUtil.zipFile(new File(FilePathConstants.SENSOR_PATH), new File(FilePathConstants.ZIP_SENSOR_PATH), null);
-//            if (zipSuccess) {
-//                //对文件进行加密
-////                LYJRSAUtil.encrypt()
-////                File file = new File(FilePathConstants.ZIP_SENSOR_PATH);
-//                byte[] bytes = FileUtil.readFile2String(new File(FilePathConstants.ZIP_SENSOR_PATH), "utf-8").getBytes();
-////                byte[] LYJRSAUtil.encrypt(LYJRSAUtil.getPublicKey(""),bytes);
-//                httpUtil.httpPostFile(url, new File(FilePathConstants.ZIP_SENSOR_PATH));
-//            }
-            httpUtil.httpPostFile(url, null);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     //加密测试
     public void encryptTest() {

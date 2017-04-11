@@ -2,8 +2,10 @@ package com.example.liuyongjie.infocollectionapps.util;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.net.DhcpInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -39,7 +41,7 @@ public class WifiUtil {
     }
 
     //获取当前手机wifi列表。6.0系统需要用户开启定位才能拿到wifi列表
-    public List<MyWifiInfo> getNearbyWifiList() {
+    public List<MyWifiInfo> getScanResults() {
         List<MyWifiInfo> listWifiInfo = null;
         try {
             List<ScanResult> results = mWifiManager.getScanResults();
@@ -58,6 +60,16 @@ public class WifiUtil {
     //返回客户端的状态信息,返回值是一个枚举值,
     public SupplicantState getSupplicanState() {
         return mWifiInfo.getSupplicantState();
+    }
+
+    //获取ConfiguredNetworks
+    public List<WifiConfiguration> getConfiguredNetworks() {
+        return mWifiManager.getConfiguredNetworks();
+    }
+
+    //获取wifi动态地址信息
+    public DhcpInfo getDHCPInfo() {
+        return mWifiManager.getDhcpInfo();
     }
 
     // 得到接入点的SSID,就是连接的wifi名
@@ -92,8 +104,8 @@ public class WifiUtil {
     }
 
     // 得到wifi的IP地址
-    public String getIPAddress() {
-        return TransformUtil.intToIp(mWifiInfo.getIpAddress());
+    public int getIPAddress() {
+        return mWifiInfo.getIpAddress();
     }
 
     //获取wifi的连接速度,单位是默认是Mbps
@@ -104,8 +116,22 @@ public class WifiUtil {
     //获取wifi信号的强度
     public int getWifiStrength() {
         int rssi = mWifiInfo.getRssi();
-        int strength = WifiManager.calculateSignalLevel(rssi, 5);
-        return strength;
+//        int strength = WifiManager.calculateSignalLevel(rssi, 5);
+        return rssi;
+    }
+
+    /**
+     * 获取wifi设备的状态
+     * <p>
+     * enable 打开 3
+     * enabing 正在打开 2
+     * disable 关闭 1
+     * disabling 正在关闭 0
+     * unknown 不可知 4
+     * </p>
+     */
+    public int getWifiState() {
+        return mWifiManager.getWifiState();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -113,5 +139,6 @@ public class WifiUtil {
     public int getFrequency() {
         return mWifiInfo.getFrequency();
     }
+
 
 }

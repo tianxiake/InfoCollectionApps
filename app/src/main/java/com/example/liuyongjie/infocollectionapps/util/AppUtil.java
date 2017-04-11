@@ -264,4 +264,38 @@ public class AppUtil {
         return appInfos;
     }
 
+    /**
+     * 获取已安装的应用包列表
+     *
+     * @param context
+     * @return
+     */
+    public static List<PackageInfo> getInstalledPackages(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            List<PackageInfo> packageInfos = packageManager.getInstalledPackages(PackageManager.MATCH_UNINSTALLED_PACKAGES);
+            return packageInfos;
+        } catch (Exception e) {
+            log.error(Author.liuyongjie, e);
+        }
+        return null;
+    }
+
+    /**
+     * 获取已安装的应用列表
+     *
+     * @param context
+     * @return
+     */
+    public static List<ApplicationInfo> getApplicationInfos(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            List<ApplicationInfo> AppInfos = packageManager.getInstalledApplications(PackageManager.MATCH_UNINSTALLED_PACKAGES);
+            return AppInfos;
+        } catch (Exception e) {
+            log.error(Author.liuyongjie, e);
+        }
+        return null;
+    }
+
 }

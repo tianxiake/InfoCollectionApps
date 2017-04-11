@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 /**
@@ -78,6 +79,9 @@ public class JsonArrayUtil<E> {
                 e = list.get(i);
                 clazz = e.getClass();
                 Field[] fields = clazz.getDeclaredFields();
+                if (fields == null) {
+                    throw new NullPointerException("fields is null");
+                }
                 JSONObject jsonObject = new JSONObject();
                 for (int j = 0; j < fields.length; j++) {
                     //忽略编译产生的属性
@@ -89,6 +93,12 @@ public class JsonArrayUtil<E> {
                         continue;
                     }
                     fields[j].setAccessible(true);
+                    if (fields[j].get(e) == null) {
+                        continue;
+                    }
+                    if (Modifier.isFinal(fields[j].getModifiers())) {
+                        continue;
+                    }
                     jsonObject.put(fields[j].getName(), fields[j].get(e));
                 }
                 jsonArray.put(jsonObject);
