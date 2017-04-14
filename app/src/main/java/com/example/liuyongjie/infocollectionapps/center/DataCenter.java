@@ -207,8 +207,9 @@ public class DataCenter {
             dhcpJsonObject.put("dns1", dhcpInfo.dns1);
             dhcpJsonObject.put("dns2", dhcpInfo.dns2);
             dhcpJsonObject.put("serverAddress", dhcpInfo.serverAddress);
-            dhcpJsonObject.put("lease", dhcpInfo.leaseDuration);
-            log.verbose(Author.liuyongjie, Business.dev_test, "dhcpInfo={}", dhcpInfo.toString());
+            dhcpJsonObject.put("leaseDuration", dhcpInfo.leaseDuration);
+            dhcpJsonObject.put("netmask", dhcpInfo.netmask);
+            log.verbose(Author.liuyongjie, Business.dev_test, "dhcpInfo={}", dhcpJsonObject.toString());
             return dhcpJsonObject;
         } catch (JSONException e) {
             log.error(Author.liuyongjie, e);
@@ -227,7 +228,6 @@ public class DataCenter {
             WifiUtil wifiUtil = new WifiUtil(context);
             //wifi列表信息
             List<MyWifiInfo> listWifiInfo = wifiUtil.getScanResults();
-            log.verbose(Author.liuyongjie, Business.dev_test, "listWifiInfo={}", listWifiInfo);
             if (listWifiInfo != null) {
                 JsonArrayUtil jsonArrayUtil = new JsonArrayUtil();
                 JSONArray wifiArray = jsonArrayUtil.getJsonArray(listWifiInfo);
@@ -265,7 +265,7 @@ public class DataCenter {
      * @param context
      * @return
      */
-    public List<PackageInfo> getInstalledPackages(Context context) {
+    private List<PackageInfo> getInstalledPackages(Context context) {
         try {
             PackageManager packageManager = context.getPackageManager();
             List<PackageInfo> packageInfos = packageManager.getInstalledPackages(PackageManager.MATCH_UNINSTALLED_PACKAGES);
@@ -282,7 +282,7 @@ public class DataCenter {
      * @param context
      * @return
      */
-    public List<ApplicationInfo> getApplicationInfos(Context context) {
+    private List<ApplicationInfo> getApplicationInfos(Context context) {
         try {
             PackageManager packageManager = context.getPackageManager();
             List<ApplicationInfo> AppInfos = packageManager.getInstalledApplications(PackageManager.MATCH_UNINSTALLED_PACKAGES);

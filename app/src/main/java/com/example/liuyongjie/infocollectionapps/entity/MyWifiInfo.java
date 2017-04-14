@@ -7,24 +7,24 @@ package com.example.liuyongjie.infocollectionapps.entity;
 
 public class MyWifiInfo {
     //wifi的名称
-    private String ssid;
+    private String SSID;
     //wifi的接入点地址(路由器的ip地址)
-    private String bssid;
+    private String BSSID;
     //wifi网络连接的优先数
     private int level;
 
-    public MyWifiInfo(String ssid, String bssid, int level) {
-        this.ssid = ssid;
-        this.bssid = bssid;
+    public MyWifiInfo(String SSID, String BSSID, int level) {
+        this.SSID = SSID;
+        this.BSSID = BSSID;
         this.level = level;
     }
 
-    public String getSsid() {
-        return ssid;
+    public String getSSID() {
+        return SSID;
     }
 
-    public String getBssid() {
-        return bssid;
+    public String getBSSID() {
+        return BSSID;
     }
 
     public int getLevel() {
@@ -32,12 +32,12 @@ public class MyWifiInfo {
     }
 
 
-    public void setSsid(String ssid) {
-        this.ssid = ssid;
+    public void setSSID(String SSID) {
+        this.SSID = SSID;
     }
 
-    public void setBssid(String bssid) {
-        this.bssid = bssid;
+    public void setBSSID(String BSSID) {
+        this.BSSID = BSSID;
     }
 
     public void setLevel(int level) {
@@ -47,8 +47,8 @@ public class MyWifiInfo {
     @Override
     public String toString() {
         return "MyWifiInfo{" +
-                "ssid='" + ssid + '\'' +
-                ", bssid='" + bssid + '\'' +
+                "SSID='" + SSID + '\'' +
+                ", BSSID='" + BSSID + '\'' +
                 ", level=" + level +
                 '}';
     }

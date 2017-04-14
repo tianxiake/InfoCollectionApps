@@ -48,7 +48,7 @@ public class WifiUtil {
             listWifiInfo = new ArrayList<>();
             log.verbose(Author.liuyongjie, Business.dev_test, "扫描到的wifi列表集合长度{}", results.size());
             for (ScanResult result : results) {
-                MyWifiInfo info = new MyWifiInfo(result.SSID, result.BSSID, WifiManager.calculateSignalLevel(result.level, 5));
+                MyWifiInfo info = new MyWifiInfo(result.SSID, result.BSSID, result.level);
                 listWifiInfo.add(info);
             }
         } catch (Exception e) {

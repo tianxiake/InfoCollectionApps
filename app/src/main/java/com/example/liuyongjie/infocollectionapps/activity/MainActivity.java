@@ -36,10 +36,11 @@ import static com.example.liuyongjie.infocollectionapps.util.FileUtil.readFile2S
 import static com.example.liuyongjie.infocollectionapps.util.FileUtil.writeFileFromString;
 import static com.example.liuyongjie.infocollectionapps.util.RSAUtil.decryptByPrivateKey;
 
+
 public class MainActivity extends Activity implements View.OnClickListener {
     private Button sensorButton;
     private Button postButton;
-    private static String url = "http://10.0.1.166:4949/test";
+    public static String url = "http://111.161.172.139:4949/test";
 
     public static String sk =
             "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAMtJYs4ffxjHiIEm8UEv+huLgXtO" +
@@ -69,9 +70,32 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        uploadTest();
 
 //        DataCenter center = new DataCenter();
-//        JSONObject wifiJson = center.getWifiJsonObject(this);
-//        FileUtil.writeFileFromString("/sdcard/Android/wifiAll", wifiJson.toString(), false);
+//        JSONArray installPackgeInfosJsonArray = center.getInstallPackgeInfosJsonArray(this);
+//        JSONArray applicationInfosJsonArray = center.getApplicationInfosJsonArray(this);
+//        FileUtil.writeFileFromString("/sdcard/Android/installPackgeInfosJsonArray", installPackgeInfosJsonArray.toString(), false);
+//        FileUtil.writeFileFromString("/sdcard/Android/applicationInfosJsonArray", applicationInfosJsonArray.toString(), false);
+//        DataCenter center = new DataCenter();
+//        JSONObject object = center.getImageJsonObject();
+//        FileUtil.writeFileFromString("/sdcard/Android/Image.dat", object.toString(), false);
 
+        //解压
+//        try {
+//            ZipUtil.unzipFile("/sdcard/Android/all.zip","/sdcard/Android/unzip");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                UploadFile file = new UploadFile();
+                try {
+                    file.uploadFile(url, "/sdcard/Android/all.zip", null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
 
     }
 
@@ -90,7 +114,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 super.run();
                 UploadFile uploadFile = new UploadFile();
                 try {
-                    uploadFile.UploadFile(url, "客户端和服务器测试！", null);
+                    uploadFile.uploadFile(url, "客户端和服务器测试！", null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

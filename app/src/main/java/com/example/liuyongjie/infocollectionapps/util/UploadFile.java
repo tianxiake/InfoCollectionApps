@@ -40,7 +40,7 @@ public class UploadFile {
     private static final int FAIL_CODE = 451;
     //时间不对code
     private static final int SYNC_TIME = 452;
-    private static final ILogger log = LoggerFactory.getLogger("UploadFile");
+    private static final ILogger log = LoggerFactory.getLogger("uploadFile");
     private static final String key = "DBTshihuayongwuxiandiyidameinv";
     private static final String app = "dbt";
 
@@ -69,7 +69,7 @@ public class UploadFile {
 
     private static final String iv = "abcdefghijklmnop";
 
-    public void UploadFile(String urlPath, String fileName, UploadListener listener) throws Exception {
+    public void uploadFile(String urlPath, String fileName, UploadListener listener) throws Exception {
         //构造url对象
         URL url = new URL(urlPath);
 
@@ -101,24 +101,29 @@ public class UploadFile {
         conn.setDoInput(true);
         conn.setDoOutput(true);
         conn.setUseCaches(false);
+//
+//        //AES加密传输内容
+//        byte[] decryptContent = FileUtil.readFile2Bytes(fileName);
+//        if(decryptContent == null){
+//            return;
+//        }
+//        byte[] content = AESUtil.encrypt(decryptContent, aesRawStr, iv);
 
-        //AES加密传输内容
-        byte[] content = AESUtil.encrypt(fileName.getBytes("utf-8"), aesRawStr, iv);
+//        //解密测试区
+//        Log.d("Http", "content length=" + content.length);
+//        String a = Base64.encodeToString(content, Base64.DEFAULT);
+//        Log.d("Http", "a=" + a);
+//        String result = Base64.encodeToString(content, Base64.DEFAULT);
+//        Log.d("Http", "AES加密后内容=" + result);
+//        byte[] decrypt = LAESUtil.decrypt(content, aesRawStr, iv);
+//        String rawStr = new String(decrypt);
+//        Log.d("Http", "AES解密后内容=" + rawStr);
 
-        //解密测试区
-        Log.d("Http", "content length=" + content.length);
-        String a = Base64.encodeToString(content, Base64.DEFAULT);
-        Log.d("Http", "a=" + a);
-        String result = Base64.encodeToString(content, Base64.DEFAULT);
-        Log.d("Http", "AES加密后内容=" + result);
-        byte[] decrypt = LAESUtil.decrypt(content, aesRawStr, iv);
-        String rawStr = new String(decrypt);
-        Log.d("Http", "AES解密后内容=" + rawStr);
-
-
+        //获取输入流：
+//        InputStream inputStream = conn.getInputStream();
         //获取输出流：
         OutputStream outputStream = conn.getOutputStream();
-        outputStream.write(content);
+        outputStream.write(fileName.getBytes("utf-8"));
         outputStream.flush();
 
         int code = conn.getResponseCode();
