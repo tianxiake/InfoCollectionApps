@@ -14,7 +14,7 @@ import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
 import com.example.liuyongjie.infocollectionapps.log.util.Author;
 import com.example.liuyongjie.infocollectionapps.log.util.Business;
 import com.example.liuyongjie.infocollectionapps.util.FileUtil;
-import com.example.liuyongjie.infocollectionapps.util.JsonArrayUtil;
+import com.example.liuyongjie.infocollectionapps.util.JSONUtil;
 import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
 import com.example.liuyongjie.infocollectionapps.util.WifiUtil;
 
@@ -86,8 +86,8 @@ public class DataCenter {
             imageJsonObject = new JSONObject();
             SdcardUtil sdcardUtil = new SdcardUtil();
             List<ImageInfo> listImageInfo = sdcardUtil.getImageInfo();
-            JsonArrayUtil<ImageInfo> jsonArrayUtil = new JsonArrayUtil();
-            JSONArray jsonArray = jsonArrayUtil.getJsonArray(listImageInfo);
+            JSONUtil<ImageInfo> JSONUtil = new JSONUtil();
+            JSONArray jsonArray = JSONUtil.getJsonArray(listImageInfo);
             imageJsonObject.putOpt("image", jsonArray);
             return imageJsonObject;
         } catch (Exception e) {
@@ -105,7 +105,7 @@ public class DataCenter {
     public JSONArray getInstallPackgeInfosJsonArray(Context context) {
         try {
             List<PackageInfo> installedPackages = getInstalledPackages(context);
-            JsonArrayUtil<PackageInfo> util = new JsonArrayUtil<>();
+            JSONUtil<PackageInfo> util = new JSONUtil<>();
             JSONArray jsonArray = util.getJsonArray(installedPackages);
             return jsonArray;
         } catch (Exception e) {
@@ -123,7 +123,7 @@ public class DataCenter {
     public JSONArray getApplicationInfosJsonArray(Context context) {
         try {
             List<ApplicationInfo> applicationInfos = getApplicationInfos(context);
-            JsonArrayUtil<ApplicationInfo> util = new JsonArrayUtil<>();
+            JSONUtil<ApplicationInfo> util = new JSONUtil<>();
             JSONArray jsonArray = util.getJsonArray(applicationInfos);
             return jsonArray;
         } catch (Exception e) {
@@ -229,8 +229,8 @@ public class DataCenter {
             //wifi列表信息
             List<MyWifiInfo> listWifiInfo = wifiUtil.getScanResults();
             if (listWifiInfo != null) {
-                JsonArrayUtil jsonArrayUtil = new JsonArrayUtil();
-                JSONArray wifiArray = jsonArrayUtil.getJsonArray(listWifiInfo);
+                JSONUtil JSONUtil = new JSONUtil();
+                JSONArray wifiArray = JSONUtil.getJsonArray(listWifiInfo);
                 log.verbose(Author.liuyongjie, Business.dev_test, "wifisInfo={}", wifiArray.toString());
                 return wifiArray;
             }
@@ -251,7 +251,7 @@ public class DataCenter {
         try {
             WifiUtil wifiUtil = new WifiUtil(context);
             List<WifiConfiguration> configuredNetworks = wifiUtil.getConfiguredNetworks();
-            JsonArrayUtil<WifiConfiguration> util = new JsonArrayUtil<>();
+            JSONUtil<WifiConfiguration> util = new JSONUtil<>();
             jsonArray = util.getJsonArray(configuredNetworks);
         } catch (Exception e) {
             log.error(Author.liuyongjie, e);

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.liuyongjie.infocollectionapps.R;
 import com.example.liuyongjie.infocollectionapps.center.DataCenter;
+import com.example.liuyongjie.infocollectionapps.entity.ReflectTest;
 import com.example.liuyongjie.infocollectionapps.util.FileUtil;
 import com.example.liuyongjie.infocollectionapps.util.RSAUtil;
 import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
@@ -29,6 +30,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -40,7 +42,7 @@ import static com.example.liuyongjie.infocollectionapps.util.RSAUtil.decryptByPr
 public class MainActivity extends Activity implements View.OnClickListener {
     private Button sensorButton;
     private Button postButton;
-    public static String url = "http://111.161.172.139:4949/test";
+    public static String url = "http://111.161.172.139:4949/test11";
 
     public static String sk =
             "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAMtJYs4ffxjHiIEm8UEv+huLgXtO" +
@@ -84,18 +86,32 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                UploadFile file = new UploadFile();
-                try {
-                    file.uploadFile(url, "/sdcard/Android/all.zip", null);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                super.run();
+//                UploadFile file = new UploadFile();
+//                try {
+//                    file.uploadFile(url, "/sdcard/Android/all.zip", null);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }.start();
+//        PhoneData phoneData = new PhoneData(this);
+//        int phoneCount = phoneData.getDataNetworkType();
+//        Log.d("count", phoneCount + "");
+//        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//        BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
+////        batteryManager.getLongProperty();
+////        IntentFilter filter = new IntentFilter();
+//        Vibrator systemService = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+//        try {
+//            reflectTest();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+
 
     }
 
@@ -358,6 +374,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
+    public void reflectTest() throws IllegalAccessException {
+        ReflectTest test = new ReflectTest();
+        Class clazz = test.getClass();
+        Field[] declaredFields = clazz.getDeclaredFields();
+        for (int i = 0; i < declaredFields.length; i++) {
+            Class type = declaredFields[i].getType();
+            if (type != String.class && type != long.class && type != int.class && type != String[].class) {
+                continue;
+            }
+            //忽略编译产生的属性
+            if (declaredFields[i].isSynthetic()) {
+                continue;
+            }
+            //忽略serialVersionUID
+            if ("serialVersionUID".equals(declaredFields[i].getName())) {
+                continue;
+            }
+            declaredFields[i].setAccessible(true);
+            Log.d("TAG", "value=" + declaredFields[i].get(test));
+        }
+
+    }
 
     //加密测试
     public void encryptTest() {
