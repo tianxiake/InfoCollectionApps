@@ -5,6 +5,11 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.DhcpInfo;
+import android.net.LinkProperties;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.ProxyInfo;
 import android.net.wifi.WifiConfiguration;
 
 import com.example.liuyongjie.infocollectionapps.entity.ImageInfo;
@@ -13,6 +18,7 @@ import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
 import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
 import com.example.liuyongjie.infocollectionapps.log.util.Author;
 import com.example.liuyongjie.infocollectionapps.log.util.Business;
+import com.example.liuyongjie.infocollectionapps.util.ConnectivityData;
 import com.example.liuyongjie.infocollectionapps.util.FileUtil;
 import com.example.liuyongjie.infocollectionapps.util.JSONUtil;
 import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
@@ -87,7 +93,7 @@ public class DataCenter {
             SdcardUtil sdcardUtil = new SdcardUtil();
             List<ImageInfo> listImageInfo = sdcardUtil.getImageInfo();
             JSONUtil<ImageInfo> JSONUtil = new JSONUtil();
-            JSONArray jsonArray = JSONUtil.getJsonArray(listImageInfo);
+            JSONArray jsonArray = JSONUtil.createJSONArray(listImageInfo);
             imageJsonObject.putOpt("image", jsonArray);
             return imageJsonObject;
         } catch (Exception e) {
@@ -106,7 +112,7 @@ public class DataCenter {
         try {
             List<PackageInfo> installedPackages = getInstalledPackages(context);
             JSONUtil<PackageInfo> util = new JSONUtil<>();
-            JSONArray jsonArray = util.getJsonArray(installedPackages);
+            JSONArray jsonArray = util.createJSONArray(installedPackages);
             return jsonArray;
         } catch (Exception e) {
             log.error(Author.liuyongjie, e);
@@ -124,7 +130,7 @@ public class DataCenter {
         try {
             List<ApplicationInfo> applicationInfos = getApplicationInfos(context);
             JSONUtil<ApplicationInfo> util = new JSONUtil<>();
-            JSONArray jsonArray = util.getJsonArray(applicationInfos);
+            JSONArray jsonArray = util.createJSONArray(applicationInfos);
             return jsonArray;
         } catch (Exception e) {
             log.error(Author.liuyongjie, e);
@@ -164,6 +170,147 @@ public class DataCenter {
         return jsonArray;
     }
 
+    /**
+     * 获取ConnectivityManager的JSONObject对象
+     */
+    public JSONObject getConnectivityManagerJsonObject(Context context) {
+        try {
+            JSONObject connectivityManagerJsonObject = new JSONObject();
+
+            ConnectivityData data = new ConnectivityData(context);
+            int status = data.getRestrictBackgroundStatus();
+            JSONObject activeNetworkInfoJsonObject = getActiveNetworkInfoJsonObject(context);
+            JSONObject defaultProxyJsonObject = getDefaultProxyJsonObject(context);
+            JSONArray allNetworkCapabilitiesJsonArray = getAllNetworkCapabilitiesJsonArray(context);
+            JSONArray allNetworkInfoJsonArray = getAllNetworkInfoJsonArray(context);
+            JSONArray allNetworkLinkPropertiesJsonArray = getAllNetworkLinkPropertiesJsonArray(context);
+            JSONObject boundNetworkForProcessJsonObject = getBoundNetworkForProcessJsonObject(context);
+
+
+            connectivityManagerJsonObject.put("restrictBackgroundStatus", status);
+            connectivityManagerJsonObject.put("activeNetworkInfo", activeNetworkInfoJsonObject);
+            connectivityManagerJsonObject.put("defaultProxy", defaultProxyJsonObject);
+            connectivityManagerJsonObject.put("allNetworkCapabilities", allNetworkCapabilitiesJsonArray);
+            connectivityManagerJsonObject.put("allNetworkInfo", allNetworkInfoJsonArray);
+            connectivityManagerJsonObject.put("allNetworkLinkProperties", allNetworkLinkPropertiesJsonArray);
+            connectivityManagerJsonObject.put("boundNetworkForProcess", boundNetworkForProcessJsonObject);
+
+            return connectivityManagerJsonObject;
+        } catch (Exception e) {
+            log.error(Author.liuyongjie, "---生成ConnectivityManagerJsonObject出异常了---", e);
+        }
+        return null;
+    }
+
+    /**
+     * 获取AllNetworkInfoJsonArray Android5.0以上API有效
+     *
+     * @param context
+     * @return
+     */
+    private JSONArray getAllNetworkInfoJsonArray(Context context) {
+        JSONArray jsonArray = null;
+        try {
+            ConnectivityData data = new ConnectivityData(context);
+            List<NetworkInfo> allNetWorkInfo = data.getAllNetWorkInfo();
+            JSONUtil util = new JSONUtil();
+            jsonArray = util.createJSONArray(allNetWorkInfo);
+            return jsonArray;
+        } catch (Exception e) {
+            log.error(Author.liuyongjie, "---生成AllNetworkInfoJsonArray出异常了---", e);
+        }
+        return jsonArray;
+    }
+
+    /**
+     * 获取AllNetworkLinkPropertiesJsonArray Android5.0以上API有效
+     *
+     * @return
+     */
+    private JSONArray getAllNetworkLinkPropertiesJsonArray(Context context) {
+        JSONArray jsonArray = null;
+        try {
+            ConnectivityData data = new ConnectivityData(context);
+            List<LinkProperties> allNetWorkLinkProperties = data.getAllNetWorkLinkProperties();
+            JSONUtil util = new JSONUtil();
+            jsonArray = util.createJSONArray(allNetWorkLinkProperties);
+            return jsonArray;
+        } catch (Exception e) {
+            log.error(Author.liuyongjie, "---生成AllNetworkLinkPropertiesJsonArray出异常了---", e);
+        }
+        return jsonArray;
+    }
+
+    /**
+     * 获取AllNetworkLinkPropertiesJsonArray Android5.0以上API有效
+     *
+     * @return
+     */
+    private JSONArray getAllNetworkCapabilitiesJsonArray(Context context) {
+        JSONArray jsonArray = null;
+        try {
+            ConnectivityData data = new ConnectivityData(context);
+            List<NetworkCapabilities> allNetworkCapabilities = data.getAllNetworkCapabilities();
+            JSONUtil util = new JSONUtil();
+            jsonArray = util.createJSONArray(allNetworkCapabilities);
+            return jsonArray;
+        } catch (Exception e) {
+            log.error(Author.liuyongjie, "---生成AllNetworkCapabilitiesJsonArray出异常了---", e);
+        }
+        return jsonArray;
+    }
+
+    /**
+     * 获取默认代理的JSONObject对象,Android6.0以上API有效
+     */
+    private JSONObject getDefaultProxyJsonObject(Context context) {
+        JSONObject jsonObject = null;
+        try {
+            ConnectivityData data = new ConnectivityData(context);
+            ProxyInfo defaultProxy = data.getDefaultProxy();
+            JSONUtil util = new JSONUtil();
+            jsonObject = util.createJSONObject(defaultProxy);
+            return jsonObject;
+        } catch (Exception e) {
+            log.error(Author.liuyongjie, "---生成DefaultProxyJsonObject出异常了---", e);
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前可用网络信息的JSONObject对象
+     */
+    private JSONObject getActiveNetworkInfoJsonObject(Context context) {
+        JSONObject jsonObject = null;
+        try {
+            ConnectivityData data = new ConnectivityData(context);
+            NetworkInfo activeNetworkInfo = data.getActiveNetworkInfo();
+            JSONUtil util = new JSONUtil();
+            jsonObject = util.createJSONObject(activeNetworkInfo);
+            return jsonObject;
+        } catch (Exception e) {
+            log.error(Author.liuyongjie, "---生成ActiveNetworkInfoJsonObject出异常了---", e);
+        }
+        return null;
+    }
+
+    /**
+     * 获取BoundNetworkForProcessJsonObject Android6.0可用
+     */
+    private JSONObject getBoundNetworkForProcessJsonObject(Context context) {
+        JSONObject jsonObject = null;
+        try {
+            ConnectivityData data = new ConnectivityData(context);
+            Network network = data.getBoundNetworkForProcess();
+            NetworkInfo networkInfo = data.getNetworkInfo(network);
+            JSONUtil util = new JSONUtil();
+            jsonObject = util.createJSONObject(networkInfo);
+            return jsonObject;
+        } catch (Exception e) {
+            log.error(Author.liuyongjie, "---生成BoundNetworkForProcessJsonObject出异常了---", e);
+        }
+        return null;
+    }
 
     /**
      * 获取当前连接的Wifi的信息 ConnectionInfo
@@ -230,7 +377,7 @@ public class DataCenter {
             List<MyWifiInfo> listWifiInfo = wifiUtil.getScanResults();
             if (listWifiInfo != null) {
                 JSONUtil JSONUtil = new JSONUtil();
-                JSONArray wifiArray = JSONUtil.getJsonArray(listWifiInfo);
+                JSONArray wifiArray = JSONUtil.createJSONArray(listWifiInfo);
                 log.verbose(Author.liuyongjie, Business.dev_test, "wifisInfo={}", wifiArray.toString());
                 return wifiArray;
             }
@@ -252,7 +399,7 @@ public class DataCenter {
             WifiUtil wifiUtil = new WifiUtil(context);
             List<WifiConfiguration> configuredNetworks = wifiUtil.getConfiguredNetworks();
             JSONUtil<WifiConfiguration> util = new JSONUtil<>();
-            jsonArray = util.getJsonArray(configuredNetworks);
+            jsonArray = util.createJSONArray(configuredNetworks);
         } catch (Exception e) {
             log.error(Author.liuyongjie, e);
         }

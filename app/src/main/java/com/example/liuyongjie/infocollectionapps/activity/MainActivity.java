@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.liuyongjie.infocollectionapps.R;
 import com.example.liuyongjie.infocollectionapps.center.DataCenter;
 import com.example.liuyongjie.infocollectionapps.entity.ReflectTest;
+import com.example.liuyongjie.infocollectionapps.util.ConnectivityData;
 import com.example.liuyongjie.infocollectionapps.util.FileUtil;
 import com.example.liuyongjie.infocollectionapps.util.RSAUtil;
 import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
@@ -111,6 +112,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        } catch (IllegalAccessException e) {
 //            e.printStackTrace();
 //        }
+//        ConnectivityManager systemService = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+//            ProxyInfo proxyInfo = systemService.getDefaultProxy();
+//        }
+//        systemService.getAllNetworks();
+        testConnectivityManager();
 
 
     }
@@ -121,9 +128,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
+    public void testConnectivityManager() {
+//        ConnectivityData connectivityData = new ConnectivityData(this);
+//        connectivityData.getAllNetworks();
+////        connectivityData.getActiveNetwork();
+//        connectivityData.getActiveNetworkInfo();
+//        connectivityData.getDefaultProxy();
+//        connectivityData.getBoundNetworkForProcess();
+//       connectivityData.getRestrictBackgroundStatus();
+        DataCenter dataCenter = new DataCenter();
+        JSONObject jsonObject = dataCenter.getConnectivityManagerJsonObject(this);
+        boolean success = FileUtil.writeFileFromString("/sdcard/Android/connectivity.json", jsonObject.toString(), false);
+        Log.d("TAG", success + "");
+        ConnectivityData data = new ConnectivityData(this);
+        data.getBoundNetworkForProcess();
+    }
 
     //上传测试
-    public void uploadTest() {
+    public void testUpload() {
         new Thread() {
             @Override
             public void run() {
