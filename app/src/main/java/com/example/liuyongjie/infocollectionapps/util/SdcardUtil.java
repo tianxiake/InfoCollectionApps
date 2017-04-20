@@ -124,7 +124,7 @@ public class SdcardUtil {
             searchDepth++;//记录深度
             for (int i = 0; i < listFiles.length; i++) {
                 if (listFiles[i].isDirectory()) {
-                    if (searchDepth >= depth) {
+                    if (searchDepth > depth) {
                         createJsonArray(parentJsonArray, listFiles[i]);
                         continue;
                     }
