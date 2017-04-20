@@ -17,8 +17,8 @@ public class SharePrefenceUtil {
      * @param context
      * @return
      */
-    public boolean saveBySharePrefrence(Context context, String name, Map<String, Object> data) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(name, Context.MODE_APPEND);
+    public static boolean saveBySharePrefrence(Context context, String name, Map<String, Object> data) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = sharedPreferences.edit();
         Set<String> keySet = data.keySet();
         for (String key : keySet) {
@@ -27,16 +27,16 @@ public class SharePrefenceUtil {
             if (clazz == String.class) {
                 String value = (String) o;
                 edit.putString(key, value);
-            } else if (clazz == int.class) {
+            } else if (clazz == Integer.class) {
                 int value = (int) o;
                 edit.putInt(key, value);
-            } else if (clazz == boolean.class) {
+            } else if (clazz == Boolean.class) {
                 boolean value = (boolean) o;
                 edit.putBoolean(key, value);
-            } else if (clazz == long.class) {
+            } else if (clazz == Long.class) {
                 long value = (long) o;
                 edit.putLong(key, value);
-            } else if (clazz == float.class) {
+            } else if (clazz == Float.class) {
                 float value = (float) o;
                 edit.putFloat(key, value);
             } else {

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.example.liuyongjie.infocollectionapps.util.ConnectivityData;
 import com.example.liuyongjie.infocollectionapps.util.FileUtil;
 import com.example.liuyongjie.infocollectionapps.util.RSAUtil;
 import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
+import com.example.liuyongjie.infocollectionapps.util.SharePrefenceUtil;
 import com.example.liuyongjie.infocollectionapps.util.ToastUtil;
 import com.example.liuyongjie.infocollectionapps.util.UploadFile;
 import com.example.liuyongjie.infocollectionapps.util.ZipUtil;
@@ -34,6 +36,8 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.example.liuyongjie.infocollectionapps.util.FileUtil.readFile2String;
 import static com.example.liuyongjie.infocollectionapps.util.FileUtil.writeFileFromString;
@@ -117,8 +121,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //            ProxyInfo proxyInfo = systemService.getDefaultProxy();
 //        }
 //        systemService.getAllNetworks();
-        testConnectivityManager();
+//        testConnectivityManager();
+        Map<String, Object> map = new HashMap<>();
+        map.put("count", 2);
+        map.put("successCount", 1);
+        map.put("failCount", 1);
+        boolean success = SharePrefenceUtil.saveBySharePrefrence(this, "content", map);
+        if (success) {
+            Toast.makeText(this, "写入sp成功!", Toast.LENGTH_SHORT).show();
+        }
 
+        SharedPreferences content = getSharedPreferences("content", MODE_PRIVATE);
+        SharedPreferences.Editor editor = content.edit();
+        editor.putInt("count", 3);
+        boolean commit = editor.commit();
+        if (commit) {
+            Toast.makeText(this, "修改成功!", Toast.LENGTH_SHORT).show();
+        }
 
     }
 

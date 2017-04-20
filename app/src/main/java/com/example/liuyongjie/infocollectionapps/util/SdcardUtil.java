@@ -2,7 +2,6 @@ package com.example.liuyongjie.infocollectionapps.util;
 
 import android.media.ExifInterface;
 import android.os.Environment;
-import android.util.Log;
 
 import com.example.liuyongjie.infocollectionapps.entity.ImageInfo;
 import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
@@ -30,8 +29,6 @@ public class SdcardUtil {
 
     /**
      * 获取图片的信息
-     *
-     * @return
      */
     public List<ImageInfo> getImageInfo() {
         try {
@@ -63,7 +60,7 @@ public class SdcardUtil {
                 return;
             }
             File[] listFiles = dirFile.listFiles();
-            if (listFiles.length == 0) {
+            if (listFiles == null || listFiles.length == 0) {
                 return;
             }
             //判断是目录还是文件
@@ -80,25 +77,20 @@ public class SdcardUtil {
                         ExifInterface exifInterface = new ExifInterface(childName);
                         String latitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
                         String longitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-                        if (latitude == null && longitude == null) {
+                        //过滤只有宽度和高度的图片
+                        String dateTime = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+                        String iso = exifInterface.getAttribute(ExifInterface.TAG_ISO);
+                        String aperture = exifInterface.getAttribute(ExifInterface.TAG_APERTURE);
+                        String focalLength = exifInterface.getAttribute(ExifInterface.TAG_FOCAL_LENGTH);
+                        if (latitude == null && longitude == null && dateTime == null && iso == null && aperture == null && focalLength == null) {
                             continue;
                         }
-                        String dateTime = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
-                        String iso = exifInterface.getAttribute(ExifInterface.TAG_ISO_SPEED_RATINGS);
-                        String aperture = exifInterface.getAttribute(ExifInterface.TAG_APERTURE_VALUE);
-                        String focalLength = exifInterface.getAttribute(ExifInterface.TAG_FOCAL_LENGTH);
-                        Log.d("位置", "latitude=" + latitude + "longitude" + longitude);
                         int height = exifInterface.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, 0);
                         int width = exifInterface.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, 0);
                         String model = exifInterface.getAttribute(ExifInterface.TAG_MODEL);
                         ImageInfo info = new ImageInfo(dateTime, latitude, longitude, height, width, model, iso, aperture, focalLength);
                         listInfo.add(info);
-                    } else if (fileExtension.equals(".PNG")) {
-                        //读取png图片的内容
-                    } else {
-                        //其他格式的图片信息
                     }
-
                 }
             }
         } catch (Exception e) {
@@ -107,43 +99,82 @@ public class SdcardUtil {
     }
 
     //控制遍历的深度
-    private static int searchLength = 0;
-//private JSONArray jsonArray ;
+    private static int searchDepth = 0;
+
 
     /**
-     * @param parentFile
+     * 扫描指定目录下所有的文件
+     *
+     * @param parentJsonArray 存放在一个JSONArray中
+     * @param parentFile      目录
+     * @param fileFilter      文件过滤器
+     * @param depth           目录扫描的深度，如depth=2,则只会扫描parentFile目录下两层的内容
+     */
+    public void getAllFiles(JSONArray parentJsonArray, File parentFile, FileFilter fileFilter, int depth) {
+        if (parentFile == null || parentFile.isFile()) {
+            return;
+        }
+        File[] listFiles = parentFile.listFiles(fileFilter);
+        if (listFiles == null) {
+            return;
+        } else {
+            createJsonArray(parentJsonArray, parentFile);
+            log.debug(Author.liuyongjie, Business.dev_test, null, "目录的名字={},目录下包含的文件的数量={}", parentFile.getName(), listFiles.length);
+            //遍历文件是目录就创建一个JsonArray
+            searchDepth++;//记录深度
+            for (int i = 0; i < listFiles.length; i++) {
+                if (listFiles[i].isDirectory()) {
+                    if (searchDepth >= depth) {
+                        createJsonArray(parentJsonArray, listFiles[i]);
+                        continue;
+                    }
+                    //是目录
+                    JSONArray childJsonArray = new JSONArray();
+                    parentJsonArray.put(childJsonArray);
+                    log.verbose(Author.liuyongjie, Business.dev_test, "目录的名字={}", listFiles[i].getName());
+                    getAllFiles(childJsonArray, listFiles[i], fileFilter, depth);
+                } else {
+                    //是文件
+                    createJsonArray(parentJsonArray, listFiles[i]);
+                }
+            }
+            searchDepth--;
+        }
+    }
+
+    /**
+     * 扫描指定目录下所有的文件
+     *
+     * @param parentJsonArray 存放在一个JSONArray中
+     * @param parentFile      目录
+     * @param fileFilter      文件过滤器
      */
     public void getAllFiles(JSONArray parentJsonArray, File parentFile, FileFilter fileFilter) {
         if (parentFile == null || parentFile.isFile()) {
             return;
         }
         File[] listFiles = parentFile.listFiles(fileFilter);
-        if (listFiles == null || listFiles.length == 0) {
+        if (listFiles == null) {
             return;
         } else {
-            JSONArray childJsonArray = new JSONArray();
-            createJsonArray(childJsonArray, parentFile);
-            parentJsonArray.put(childJsonArray);
-//            searchLength++;
-//            if (searchLength > Integer.MAX_VALUE) {
-//                return;
-//            }
-//            JSONArray array = new JSONArray();
+            createJsonArray(parentJsonArray, parentFile);
+            log.debug(Author.liuyongjie, Business.dev_test, null, "目录的名字={},目录下包含的文件的数量={}", parentFile.getName(), listFiles.length);
             //遍历文件是目录就创建一个JsonArray
-            for (File childFile : listFiles) {
-                Log.d("TAG", listFiles.length + "");
-                //是目录
-                if (childFile.isDirectory()) {
-//                    createJsonObject(jsonArray,child);
-                    Log.d("TAG", childFile.getName());
-                    getAllFiles(childJsonArray, childFile, fileFilter);
-
+            for (int i = 0; i < listFiles.length; i++) {
+                if (listFiles[i].isDirectory()) {
+                    //是目录
+                    JSONArray childJsonArray = new JSONArray();
+                    parentJsonArray.put(childJsonArray);
+                    log.verbose(Author.liuyongjie, Business.dev_test, "目录的名字={}", listFiles[i].getName());
+                    getAllFiles(childJsonArray, listFiles[i], fileFilter);
                 } else {
-                    createJsonArray(childJsonArray, childFile);
+                    //是文件
+                    createJsonArray(parentJsonArray, listFiles[i]);
                 }
             }
         }
     }
+
 
 //    /**
 //     * @param parentFile
@@ -196,7 +227,7 @@ public class SdcardUtil {
         }
     }
 
-    public void createJsonArray(JSONArray jsonArray, File file) {
+    private void createJsonArray(JSONArray jsonArray, File file) {
         if (file == null) {
             return;
         } else {

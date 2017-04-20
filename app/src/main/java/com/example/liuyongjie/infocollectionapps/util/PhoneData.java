@@ -142,7 +142,68 @@ public class PhoneData {
      * @return 取不到返回 ""
      */
     public String getNetworkOperatorName() {
+        telephonyManager.getCellLocation();
         return telephonyManager.getNetworkOperatorName();
+    }
+
+
+    public int getCallState() {
+        return telephonyManager.getCallState();
+    }
+
+    public int getDataActivity() {
+        return telephonyManager.getDataActivity();
+    }
+
+    public int getDataState() {
+        return telephonyManager.getDataState();
+    }
+
+    public String getGroupIdLevel1() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return telephonyManager.getGroupIdLevel1();
+        }
+        return null;
+    }
+
+    public int getNetworkType() {
+        return telephonyManager.getNetworkType();
+    }
+
+    public String getSimOperator() {
+        return telephonyManager.getSimOperator();
+    }
+
+    public String getSimOperatorName() {
+        return telephonyManager.getSimOperatorName();
+    }
+
+    public int getSimState() {
+        return telephonyManager.getSimState();
+    }
+
+    public String getSubscriberId() {
+        return telephonyManager.getSubscriberId();
+    }
+
+    public String getVoiceMailNumber() {
+        return telephonyManager.getVoiceMailNumber();
+    }
+
+    public int getVoiceNetworkType() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return telephonyManager.getVoiceNetworkType();
+        }
+        return -1;
+    }
+
+    public String getLine1Number(){
+        try {
+            return telephonyManager.getLine1Number();
+        } catch (Exception e) {
+
+        }
+        return null;
     }
 
 

@@ -82,7 +82,6 @@ public class ConnectivityData {
         Network[] networks = getAllNetworks();
         if (networks != null) {
             for (int i = 0; i < networks.length; i++) {
-//                NetworkInfo networkInfo = getNetworkInfo(networks[i]);
                 NetworkCapabilities networkCapabilities = getNetworkCapabilities(networks[i]);
                 list.add(networkCapabilities);
             }
@@ -115,7 +114,7 @@ public class ConnectivityData {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             Network[] allNetworks = connectivityManager.getAllNetworks();
 //            Log.d("Networks", allNetworks.toString());
-            log.verbose(Author.liuyongjie, Business.dev_test, "allNetworks={}", allNetworks);
+//            log.verbose(Author.liuyongjie, Business.dev_test, "allNetworks={}", allNetworks);
             if (allNetworks != null) {
                 Log.d("lyj", "-------------------allNetworks---------------------------");
                 for (int i = 0; i < allNetworks.length; i++) {
