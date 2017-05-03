@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -20,7 +22,6 @@ import com.example.liuyongjie.infocollectionapps.util.ConnectivityData;
 import com.example.liuyongjie.infocollectionapps.util.FileUtil;
 import com.example.liuyongjie.infocollectionapps.util.RSAUtil;
 import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
-import com.example.liuyongjie.infocollectionapps.util.SharePrefenceUtil;
 import com.example.liuyongjie.infocollectionapps.util.ToastUtil;
 import com.example.liuyongjie.infocollectionapps.util.UploadFile;
 import com.example.liuyongjie.infocollectionapps.util.ZipUtil;
@@ -36,8 +37,7 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import static com.example.liuyongjie.infocollectionapps.util.FileUtil.readFile2String;
 import static com.example.liuyongjie.infocollectionapps.util.FileUtil.writeFileFromString;
@@ -122,22 +122,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        }
 //        systemService.getAllNetworks();
 //        testConnectivityManager();
-        Map<String, Object> map = new HashMap<>();
-        map.put("count", 2);
-        map.put("successCount", 1);
-        map.put("failCount", 1);
-        boolean success = SharePrefenceUtil.saveBySharePrefrence(this, "content", map);
-        if (success) {
-            Toast.makeText(this, "写入sp成功!", Toast.LENGTH_SHORT).show();
-        }
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("count", 2);
+//        map.put("successCount", 1);
+//        map.put("failCount", 1);
+//        boolean success = SharePrefenceUtil.saveBySharePrefrence(this, "content", map);
+//        if (success) {
+//            Toast.makeText(this, "写入sp成功!", Toast.LENGTH_SHORT).show();
+//        }
+//
+//        SharedPreferences content = getSharedPreferences("content", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = content.edit();
+//        editor.putInt("count", 3);
+//        boolean commit = editor.commit();
+//        if (commit) {
+//            Toast.makeText(this, "修改成功!", Toast.LENGTH_SHORT).show();
+//        }
+        testLocation();
 
-        SharedPreferences content = getSharedPreferences("content", MODE_PRIVATE);
-        SharedPreferences.Editor editor = content.edit();
-        editor.putInt("count", 3);
-        boolean commit = editor.commit();
-        if (commit) {
-            Toast.makeText(this, "修改成功!", Toast.LENGTH_SHORT).show();
-        }
 
     }
 
@@ -146,6 +148,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
         builder.setTitle("警告").setMessage("你犯规了").create().show();
 
     }
+
+    //LocationManager测试区域
+    public void testLocation() {
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        List<String> listProvider = manager.getAllProviders();
+        Log.d("TAG", listProvider + "");
+        List<String> providers = manager.getProviders(true);
+        Log.d("TAG", providers + "");
+        for (String str : listProvider) {
+            Location lastKnownLocation = manager.getLastKnownLocation(str);
+            Log.d("TAG", lastKnownLocation + "");
+        }
+
+
+        PackageManager pm = getPackageManager();
+        boolean permission = PackageManager.PERMISSION_GRANTED == pm.checkPermission("android.permission.ACCESS_COARSE_LOCATION", "com.example.liuyongjie.infocollectionapps");
+        Log.d("TAG", "boolean=" + permission);
+    }
+
 
     public void testConnectivityManager() {
 //        ConnectivityData connectivityData = new ConnectivityData(this);
