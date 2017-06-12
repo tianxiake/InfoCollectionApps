@@ -18,11 +18,14 @@ import android.widget.Toast;
 import com.example.liuyongjie.infocollectionapps.R;
 import com.example.liuyongjie.infocollectionapps.center.DataCenter;
 import com.example.liuyongjie.infocollectionapps.entity.ReflectTest;
+import com.example.liuyongjie.infocollectionapps.log.LoggerFactory;
+import com.example.liuyongjie.infocollectionapps.log.intf.ILogger;
 import com.example.liuyongjie.infocollectionapps.util.ConnectivityData;
 import com.example.liuyongjie.infocollectionapps.util.FileUtil;
 import com.example.liuyongjie.infocollectionapps.util.RSAUtil;
 import com.example.liuyongjie.infocollectionapps.util.SdcardUtil;
 import com.example.liuyongjie.infocollectionapps.util.ToastUtil;
+import com.example.liuyongjie.infocollectionapps.util.TransformUtil;
 import com.example.liuyongjie.infocollectionapps.util.UploadFile;
 import com.example.liuyongjie.infocollectionapps.util.ZipUtil;
 
@@ -32,12 +35,15 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import static com.example.liuyongjie.infocollectionapps.util.FileUtil.readFile2String;
 import static com.example.liuyongjie.infocollectionapps.util.FileUtil.writeFileFromString;
@@ -48,6 +54,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Button sensorButton;
     private Button postButton;
     public static String url = "http://111.161.172.139:4949/test11";
+    private static final ILogger log = LoggerFactory.getLogger("fasfds");
 
     public static String sk =
             "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAMtJYs4ffxjHiIEm8UEv+huLgXtO" +
@@ -74,79 +81,34 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         initView();
         setListener();
-//        uploadTest();
-
-//        DataCenter center = new DataCenter();
-//        JSONArray installPackgeInfosJsonArray = center.getInstallPackgeInfosJsonArray(this);
-//        JSONArray applicationInfosJsonArray = center.getApplicationInfosJsonArray(this);
-//        FileUtil.writeFileFromString("/sdcard/Android/installPackgeInfosJsonArray", installPackgeInfosJsonArray.toString(), false);
-//        FileUtil.writeFileFromString("/sdcard/Android/applicationInfosJsonArray", applicationInfosJsonArray.toString(), false);
-//        DataCenter center = new DataCenter();
-//        JSONObject object = center.getImageJsonObject();
-//        FileUtil.writeFileFromString("/sdcard/Android/Image.dat", object.toString(), false);
-
-        //解压
-//        try {
-//            ZipUtil.unzipFile("/sdcard/Android/all.zip","/sdcard/Android/unzip");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        new Thread() {
-//            @Override
-//            public void run() {
-//                super.run();
-//                UploadFile file = new UploadFile();
-//                try {
-//                    file.uploadFile(url, "/sdcard/Android/all.zip", null);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }.start();
-//        PhoneData phoneData = new PhoneData(this);
-//        int phoneCount = phoneData.getDataNetworkType();
-//        Log.d("count", phoneCount + "");
-//        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//        BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
-////        batteryManager.getLongProperty();
-////        IntentFilter filter = new IntentFilter();
-//        Vibrator systemService = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-//        try {
-//            reflectTest();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//        ConnectivityManager systemService = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-//            ProxyInfo proxyInfo = systemService.getDefaultProxy();
-//        }
-//        systemService.getAllNetworks();
-//        testConnectivityManager();
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("count", 2);
-//        map.put("successCount", 1);
-//        map.put("failCount", 1);
-//        boolean success = SharePrefenceUtil.saveBySharePrefrence(this, "content", map);
-//        if (success) {
-//            Toast.makeText(this, "写入sp成功!", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        SharedPreferences content = getSharedPreferences("content", MODE_PRIVATE);
-//        SharedPreferences.Editor editor = content.edit();
-//        editor.putInt("count", 3);
-//        boolean commit = editor.commit();
-//        if (commit) {
-//            Toast.makeText(this, "修改成功!", Toast.LENGTH_SHORT).show();
-//        }
-        testLocation();
-
-
+        String s = TransformUtil.intToIp(-1372870464);
+        Log.d("LYJ_TAG", s);
     }
 
     public void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("警告").setMessage("你犯规了").create().show();
 
+    }
+
+    public void zipByte(String desZip) {
+        ZipOutputStream zipOutputStream;
+        FileOutputStream fileOutputStream;
+        try {
+            fileOutputStream = new FileOutputStream(desZip, false);
+            zipOutputStream = new ZipOutputStream(fileOutputStream);
+            String rootPath = "a" + '/' + "b" + '/' + "c" + '/';
+            ZipEntry zipEntry = new ZipEntry(rootPath);
+            zipOutputStream.putNextEntry(zipEntry);
+            zipOutputStream.closeEntry();
+            ZipEntry zipEntry1 = new ZipEntry(rootPath + "hello");
+            zipOutputStream.putNextEntry(zipEntry1);
+            zipOutputStream.write("helloWorld".getBytes());
+            zipOutputStream.flush();
+            zipOutputStream.closeEntry();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //LocationManager测试区域
@@ -517,5 +479,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        }.start();
 
     }
+
+
 }
 

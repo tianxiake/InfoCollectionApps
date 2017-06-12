@@ -30,26 +30,26 @@ public class LocationData implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        log.verbose(Author.lyj, Business.dev_test, "onLocationChanged");
+        log.verbose(Author.liuyongjie, Business.dev_test, "onLocationChanged");
         if (location != null) {
             double latitude = location.getLatitude();
             double longitude = location.getLongitude();
-            log.verbose(Author.lyj, Business.dev_test, "latitude={},longitude={}", latitude, longitude);
+            log.verbose(Author.liuyongjie, Business.dev_test, "latitude={},longitude={}", latitude, longitude);
         }
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        log.verbose(Author.lyj, Business.dev_test, "onStatusChanged");
+        log.verbose(Author.liuyongjie, Business.dev_test, "onStatusChanged");
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-        log.verbose(Author.lyj, Business.dev_test, "onProviderEnabled");
+        log.verbose(Author.liuyongjie, Business.dev_test, "onProviderEnabled");
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        log.verbose(Author.lyj, Business.dev_test, "onProviderDisabled");
+        log.verbose(Author.liuyongjie, Business.dev_test, "onProviderDisabled");
     }
 }

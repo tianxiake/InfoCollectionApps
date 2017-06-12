@@ -34,6 +34,7 @@ public class UploadFile {
             "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChslLbbeXAwgWgLCHgW52M/fHKsvwq1RrxZAR5" +
                     "hUstiGTbVobTZQt+TikyySIlZSq51fCwZCck0kaAKYOsqEEshCbpLI/eculRHEA+xLpw+SmhEObV" +
                     "oIsWZUDP6cfl88Wrgt9Hpx/0JR6BFKP1DVcRKpJjbWagpQIscpL4iCh3dwIDAQAB";
+
     //上传成功code
     private static final int SUCCESS_CODE = 450;
     //上传失败code
@@ -75,7 +76,7 @@ public class UploadFile {
 
         long time = System.currentTimeMillis();
         String token = HttpUtil.string2MD5(key + time + app);
-        //随机生成16位AES公钥
+        //随机生成256位AES公钥
         String aesRawStr = StringUtils.randomString(16);//生成AESKey utf-8
         //加密后字节数组 utf-8编码
         byte[] encodeByte = RSAUtil.encryptByPublicKey(aesRawStr.getBytes(), MainActivity.pk);
